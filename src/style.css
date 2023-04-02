@@ -32,7 +32,7 @@
     font-size: 1.5rem;
     font-weight: 700;
     line-height: 1.5;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     color: #ffffff;
     background-color: unset;
 }
@@ -61,19 +61,20 @@ button:hover {
 }
 
 .flex-item-left {
-    flex: 40%;
+    flex: 50%;
     text-align: center;
     margin-bottom: 2rem;
+    max-width: 900px;
 }
 
-#canvas {
+canvas {
     margin: auto;
     border-radius: 0.5rem;
     box-shadow: 0 0 30px rgba(255, 255, 255, 0.03);
 }
 
 .flex-item-right {
-    flex: 60%;
+    flex: 50%;
 }
 
 .tools-container {
@@ -124,7 +125,7 @@ button:hover {
 .slider-item {
     display: flex;
     align-items: center;
-    margin: 10px;
+    margin: 4px 10px;
 }
 
 label {
@@ -308,11 +309,14 @@ input[type="radio"] {
         font-size: 1rem;
     }
 
-    .flex-item-left canvas {
-        width: 600px;
-        /* set width to 400px */
-        height: 600px;
-        /* set height to 400px */
+    .flex-item-left #canvas {
+        width: 500px;
+        height: 500px;
+    }
+
+    .flex-item-left #canvas2 {
+        width: 300px;
+        height: 300px;
     }
 }
 
@@ -330,11 +334,14 @@ input[type="radio"] {
         margin-bottom: 0.5rem;
     }
 
-    .flex-item-left canvas {
-        width: 400px;
-        /* set width to 400px */
-        height: 400px;
-        /* set height to 400px */
+    .flex-item-left #canvas {
+        width: 300px;
+        height: 300px;
+    }
+
+    .flex-item-left #canvas2 {
+        width: 200px;
+        height: 200px;
     }
 
     .title {
@@ -353,4 +360,24 @@ input[type="radio"] {
     .title {
         font-size: 1.5rem;
     }
+}
+
+.clear-bg {
+    background-color: unset;
+}
+
+.flex40 {
+    flex: 40%;
+}
+
+.flex60 {
+    flex: 60%;
+}
+
+.align-left {
+    text-align: left;
+}
+
+.mt-10 {
+    margin-top: 10px;
 }
