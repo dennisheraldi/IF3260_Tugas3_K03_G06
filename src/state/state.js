@@ -1,7 +1,7 @@
 // Define the state of the app
 const initialState = {
     // Initial state
-    model: hollowCube,
+    model: filledCube,
     model_type: "preserved",
     projection_type: "orthographic", // "orthographic" or "perspective" or "oblique"
     view_field: 90, // 0 - 180,
@@ -98,7 +98,7 @@ document.getElementById("reset-btn").addEventListener("click", (e) => {
     drawScene();
 });
 
-models = [hollowCube, hollowPrism, takodachi];
+models = [filledCube, hollowPrism, takodachi];
 // set listener to model selection radio buttons
 var modelSelection = document.querySelectorAll('input[name="model"]');
 modelSelection.forEach((model) => {

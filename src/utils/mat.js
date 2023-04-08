@@ -1,27 +1,50 @@
 var m4 = {
-    // prettier-ignore
     orthographic: function (left, right, bottom, top, near, far) {
         return [
-            2 / (right - left), 0, 0, 0,
-            0, 2 / (top - bottom), 0, 0,
-            0, 0, 2 / (near - far), 0,
-            (left + right) / (left - right), (bottom + top) / (bottom - top), (near + far) / (near - far), 1,
+            2 / (right - left),
+            0,
+            0,
+            0,
+            0,
+            2 / (top - bottom),
+            0,
+            0,
+            0,
+            0,
+            2 / (near - far),
+            0,
+            (left + right) / (left - right),
+            (bottom + top) / (bottom - top),
+            (near + far) / (near - far),
+            1,
         ];
     },
 
-    // prettier-ignore
-    perspective: function (fieldOfViewInRadians) {
-        var f = Math.tan(Math.PI * 0.5 - 0.5 * fieldOfViewInRadians);
+    perspective: function (foVRadians, aspect, near, far) {
+        var f = Math.tan(Math.PI * 0.5 - 0.5 * foVRadians);
+        var rangeInv = 1.0 / (near - far);
 
         return [
-            f, 0, 0, 0,
-            0, f, 0, 0,
-            0, 0, 1, 1,
-            0, 0, 0, 1,
+            f / aspect,
+            0,
+            0,
+            0,
+            0,
+            f,
+            0,
+            0,
+            0,
+            0,
+            (near + far) * rangeInv,
+            -1,
+            0,
+            0,
+            near * far * rangeInv * 2,
+            0,
         ];
     },
 
-    oblique: function (f, beta) {
+    oblique: function (f, beta, zMin, zMax) {
         var cosBeta = Math.cos(beta);
         var sinBeta = Math.sin(beta);
         return [
@@ -35,8 +58,8 @@ var m4 = {
             0,
             f * cosBeta,
             f * sinBeta,
-            1,
-            0,
+            -2 / (zMax - zMin),
+            -(zMax + zMin) / (zMax - zMin),
             0,
             0,
             0,
@@ -186,25 +209,13 @@ var m4 = {
         var tmp_23 = m10 * m01;
 
         var t0 =
-            tmp_0 * m11 +
-            tmp_3 * m21 +
-            tmp_4 * m31 -
-            (tmp_1 * m11 + tmp_2 * m21 + tmp_5 * m31);
+            tmp_0 * m11 + tmp_3 * m21 + tmp_4 * m31 - (tmp_1 * m11 + tmp_2 * m21 + tmp_5 * m31);
         var t1 =
-            tmp_1 * m01 +
-            tmp_6 * m21 +
-            tmp_9 * m31 -
-            (tmp_0 * m01 + tmp_7 * m21 + tmp_8 * m31);
+            tmp_1 * m01 + tmp_6 * m21 + tmp_9 * m31 - (tmp_0 * m01 + tmp_7 * m21 + tmp_8 * m31);
         var t2 =
-            tmp_2 * m01 +
-            tmp_7 * m11 +
-            tmp_10 * m31 -
-            (tmp_3 * m01 + tmp_6 * m11 + tmp_11 * m31);
+            tmp_2 * m01 + tmp_7 * m11 + tmp_10 * m31 - (tmp_3 * m01 + tmp_6 * m11 + tmp_11 * m31);
         var t3 =
-            tmp_5 * m01 +
-            tmp_8 * m11 +
-            tmp_11 * m21 -
-            (tmp_4 * m01 + tmp_9 * m11 + tmp_10 * m21);
+            tmp_5 * m01 + tmp_8 * m11 + tmp_11 * m21 - (tmp_4 * m01 + tmp_9 * m11 + tmp_10 * m21);
 
         var d = 1.0 / (m00 * t0 + m10 * t1 + m20 * t2 + m30 * t3);
 
@@ -275,30 +286,31 @@ var m4 = {
                     (tmp_20 * m12 + tmp_23 * m22 + tmp_17 * m02)),
         ];
     },
-    lookAt: function (cameraPosition, target, up) {
-        var zAxis = normalize(subtractVectors(cameraPosition, target));
-        var xAxis = normalize(cross(up, zAxis));
-        var yAxis = normalize(cross(zAxis, xAxis));
-
+    lookAt: function (cameraPos, cameraDirection, cameraRight, cameraUp) {
         return [
-            xAxis[0],
-            xAxis[1],
-            xAxis[2],
+            cameraRight[0],
+            cameraUp[0],
+            cameraDirection[0],
             0,
-            yAxis[0],
-            yAxis[1],
-            yAxis[2],
+            cameraRight[1],
+            cameraUp[1],
+            cameraDirection[1],
             0,
-            zAxis[0],
-            zAxis[1],
-            zAxis[2],
+            cameraRight[2],
+            cameraUp[2],
+            cameraDirection[2],
             0,
-            cameraPosition[0],
-            cameraPosition[1],
-            cameraPosition[2],
+            -cameraRight[0] * cameraPos[0] -
+                cameraRight[1] * cameraPos[1] -
+                cameraRight[2] * cameraPos[2],
+            -cameraUp[0] * cameraPos[0] - cameraUp[1] * cameraPos[1] - cameraUp[2] * cameraPos[2],
+            -cameraDirection[0] * cameraPos[0] -
+                cameraDirection[1] * cameraPos[1] -
+                cameraDirection[2] * cameraPos[2],
             1,
         ];
     },
+
     normalize: function (v) {
         var length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
         // make sure we don't divide by 0.
@@ -338,11 +350,7 @@ function degToRad(d) {
 }
 
 function cross(a, b) {
-    return [
-        a[1] * b[2] - a[2] * b[1],
-        a[2] * b[0] - a[0] * b[2],
-        a[0] * b[1] - a[1] * b[0],
-    ];
+    return [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
 }
 
 function subtractVectors(a, b) {

@@ -420,9 +420,9 @@ for (var i = 0; i < hollowCube.position.length; i++) {
 
     // prettier-ignore
     hollowCube.color.push([
-        r_color, g_color, b_color,
-        r_color, g_color, b_color,
-        r_color, g_color, b_color,
-        r_color, g_color, b_color,
+        r_color, g_color, b_color, 1.0,
+        r_color, g_color, b_color, 1.0,
+        r_color, g_color, b_color, 1.0,
+        r_color, g_color, b_color, 1.0,
     ]);
 }
