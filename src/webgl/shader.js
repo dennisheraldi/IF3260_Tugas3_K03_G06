@@ -9,27 +9,27 @@ const vertexShaderText = `
     uniform mat4 u_view;
     uniform mat4 u_projection;
 
-    // varying highp vec2 v_texCoord;
+    varying highp vec2 v_texCoord;
     varying highp vec4 v_color;
     
     void main() {
         gl_Position = u_projection * u_view * u_model * a_position;
-        // v_texCoord = a_texCoord;
-        v_color = a_color;
+        v_texCoord = a_texCoord;
+        // v_color = a_color;
     }
 `;
 
 const fragmentShaderText = `
     precision mediump float;
-    // varying highp vec2 v_texCoord;
-    // uniform sampler2D uSampler;
+    varying highp vec2 v_texCoord;
+    uniform sampler2D uSampler;
 
     // Passed in from the vertex shader.
     varying vec4 v_color;
 
     void main() {
-        gl_FragColor = v_color;
-        // gl_FragColor = texture2D(uSampler, v_texCoord);
+        // gl_FragColor = v_color;
+        gl_FragColor = texture2D(uSampler, v_texCoord);
     }
 `;
 
@@ -40,7 +40,6 @@ const vertexShaderTextShading = `
     attribute vec3 a_normal;
     attribute vec4 a_color;
 
-    // uniform mat4 u_matrix;
     uniform mat4 u_model;
     uniform mat4 u_view;
     uniform mat4 u_projection;
@@ -53,9 +52,9 @@ const vertexShaderTextShading = `
 
     void main() {
         gl_Position = u_projection * u_view * u_model * a_position;
-        // v_texCoord = a_texCoord;
+        v_texCoord = a_texCoord;
         
-        v_color = a_color;
+        // v_color = a_color;
 
         // Apply lighting effect
   
@@ -73,10 +72,14 @@ const vertexShaderTextShading = `
 const fragmentShaderTextShading = `
     precision mediump float;
 
+    uniform sampler2D uSampler;
+
     varying vec4 v_color;
     varying vec3 v_shading;
+    varying highp vec2 v_texCoord;
 
     void main() {
-        gl_FragColor = v_color * vec4(v_shading, 1.0);
+        // gl_FragColor = v_color * vec4(v_shading, 1.0);
+        gl_FragColor = texture2D(uSampler, v_texCoord) * vec4(v_shading, 1.0);
     }
 `;

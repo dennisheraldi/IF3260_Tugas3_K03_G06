@@ -23,6 +23,23 @@ var program_with_shade = createProgram(
 // Program without shading
 var program_no_shade = createProgram(gl, vertexShaderText, fragmentShaderText);
 
+var texture = loadTexture(gl, "texture/moyai.png");
+
+// Create position buffer
+var positionBuffer = gl.createBuffer();
+
+// Create color buffer
+var colorBuffer = gl.createBuffer();
+
+// Create normal buffer
+var normalBuffer = gl.createBuffer();
+
+// Create texture buffer
+var textureBuffer = gl.createBuffer();
+
+// Create texture coordinates buffer
+var textureCoordBuffer = gl.createBuffer();
+
 // Initialize camera
 var target = [0, 0, 0];
 var up = [0, 1, 0];
@@ -41,23 +58,8 @@ function drawScene() {
     var normalAttribLocation = gl.getAttribLocation(program, "a_normal");
     var positionAttribLocation = gl.getAttribLocation(program, "a_position");
     var colorAttribLocation = gl.getAttribLocation(program, "a_color");
-    // var textureCoordLocation = gl.getAttribLocation(program, "a_texCoord");
+    var textureCoordLocation = gl.getAttribLocation(program, "a_texCoord");
     // var samplerLocation = gl.getUniformLocation(program, "uSampler");
-
-    // Create position buffer
-    var positionBuffer = gl.createBuffer();
-
-    // Create color buffer
-    var colorBuffer = gl.createBuffer();
-
-    // Create normal buffer
-    var normalBuffer = gl.createBuffer();
-
-    // Create texture buffer
-    var textureBuffer = gl.createBuffer();
-
-    // Create texture coordinates buffer
-    // var textureCoordBuffer = gl.createBuffer();
 
     // Set the viewport
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
@@ -166,19 +168,16 @@ function drawScene() {
     var textureCoordBuffer = initTextureBuffer(gl);
 
     // Set texture coordinate
-    // setBuffer(gl, textureCoordBuffer, state.texture_coords, textureCoordLocation, 2);
+    setBuffer(gl, textureCoordBuffer, state.texture_coords, textureCoordLocation, 2);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
+    gl.bufferData(
+        gl.ARRAY_BUFFER,
+        new Float32Array(state.texture_coords),
+        gl.STATIC_DRAW
+    );
 
 
-
-    // gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
-    // gl.bufferData(
-    //     gl.ARRAY_BUFFER,
-    //     new Float32Array(state.texture_coords),
-    //     gl.STATIC_DRAW
-    // );
-
-
-    var texture = loadTexture(gl, "texture/moyai.png");
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 
     // Draw the model here
@@ -231,7 +230,7 @@ function drawScene() {
         } else {
             // Set color buffer
             
-            // setBuffer(gl, textureBuffer, textures, textureAttribLocation, 2);
+            // setBuffer(gl, textureBuffer, texture, textureCoordLocation, 2);
             
             // Set the texture.
             // Tell WebGL we want to affect texture unit 0
@@ -243,7 +242,7 @@ function drawScene() {
             // Tell the shader we bound the texture to texture unit 0
             // gl.uniform1i(samplerLocation, 0);
         }
-        setBuffer(gl, colorBuffer, model.color[i], colorAttribLocation, 3);
+        // setBuffer(gl, colorBuffer, model.color[i], colorAttribLocation, 3);
 
         // gl.drawArrays(gl.TRIANGLE_FAN, 0, model.position[i].length / 3);
         // gl.drawArrays(gl.TRIANGLES, 0, model.position[i].length / 3);
