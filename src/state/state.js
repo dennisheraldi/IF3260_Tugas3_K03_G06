@@ -1,7 +1,7 @@
 // Define the state of the app
 const initialState = {
     // Initial state
-    model: filledCube,
+    model: fox,
     model_type: "preserved",
     projection_type: "orthographic", // "orthographic" or "perspective" or "oblique"
     view_field: 90, // 0 - 180,
