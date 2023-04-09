@@ -100,14 +100,6 @@ var root = {
 
 treeview.replaceData(root);
 
-// var key1 = "class:body";
-// var objek = {};
-// objek[key1] = {
-//     label: state.model.object.name,
-// };
-
-// treeview.appendData(objek, "root");
-
 function appendDataFromObject(object, parentId) {
     var key = "class:" + object.name.replace(/\s/g, "");
     var obj = {};
