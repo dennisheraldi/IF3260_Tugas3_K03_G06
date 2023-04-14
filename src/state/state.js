@@ -98,7 +98,7 @@ document.getElementById("reset-btn").addEventListener("click", (e) => {
     drawScene();
 });
 
-models = [filledCube, hollowPrism, takodachi];
+models = [filledCube, fox, human, hollowPrism];
 // set listener to model selection radio buttons
 var modelSelection = document.querySelectorAll('input[name="model"]');
 modelSelection.forEach((model) => {

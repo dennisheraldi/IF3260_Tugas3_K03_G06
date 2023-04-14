@@ -24,7 +24,7 @@ var program_with_shade = createProgram(
 // Program without shading
 var program_no_shade = createProgram(gl, vertexShaderText, fragmentShaderText);
 
-var texture = loadTexture(gl, "texture/moyai.png");
+var texture = loadTexture(gl, "texture/sob.png");
 
 // Create position buffer
 var positionBuffer = gl.createBuffer();
@@ -144,6 +144,7 @@ function drawScene() {
     );
 
     // If the projection is perspective, multiply the matrices
+    state.projection_type = "perspective";
     if (state.projection_type === "perspective") {
         projectionMatrix = m4.perspective(
             degToRad(state.view_field),
