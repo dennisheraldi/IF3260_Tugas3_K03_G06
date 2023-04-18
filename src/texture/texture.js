@@ -1,5 +1,6 @@
 function loadTexture(gl, url) {
     var texture = gl.createTexture();
+    gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, texture);
 
     // Because images have to be downloaded over the internet
@@ -73,6 +74,7 @@ function isPowerOf2(value) {
 
 function initTextureBuffer(gl) {
     var textureCoordBuffer = gl.createBuffer();
+    gl.activeTexture(gl.TEXTURE1);
     gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
 
     var textureCoordinates = [
@@ -158,31 +160,33 @@ function loadEnvironmentTexture(gl) {
         },
       ];
 
-    environtmentFaceInfos.forEach((faceInfo) => {
-        var { target, url } = faceInfo;
-
-        var level = 0;
-        var internalFormat = gl.RGBA;
-        var width = 512;
-        var height = 512;
-        var format = gl.RGBA;
-        var type = gl.UNSIGNED_BYTE;
-
+      environtmentFaceInfos.forEach((faceInfo) => {
+        const {target, url} = faceInfo;
+    
+        // Upload the canvas to the cubemap face.
+        const level = 0;
+        const internalFormat = gl.RGBA;
+        const width = 512;
+        const height = 512;
+        const format = gl.RGBA;
+        const type = gl.UNSIGNED_BYTE;
+    
+        // setup each face so it's immediately renderable
         gl.texImage2D(target, level, internalFormat, width, height, 0, format, type, null);
-
-        var image = new Image();
+    
+        // Asynchronously load an image
+        const image = new Image();
+        image.crossOrigin = "";
         image.src = url;
-        image.crossOrigin = "anonymous";
-        image.addEventListener('load', function () {
-
-        gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
-        gl.texImage2D(target, level, internalFormat, format, type, image);
-        gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
+        image.addEventListener('load', function() {
+          // Now that the image has loaded make copy it to the texture.
+          gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
+          gl.texImage2D(target, level, internalFormat, format, type, image);
+          gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
         });
-    });
-
-    gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
-    gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+      });
+      gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
+      gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
 
     return texture;
 }

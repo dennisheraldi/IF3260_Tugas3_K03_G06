@@ -11,11 +11,11 @@ if (!gl) {
 }
 // Setup GLSL program
 // Program with shading
-var program_with_shade = createProgram(
-    gl,
-    vertexShaderTextShading,
-    fragmentShaderTextShading
-);
+// var program_with_shade = createProgram(
+//     gl,
+//     vertexShaderTextShading,
+//     fragmentShaderTextShading
+// );
 
 // Program without shading
 var program_no_shade = createProgram(gl, vertexShaderText, fragmentShaderText);
@@ -43,7 +43,8 @@ var up = [0, 1, 0];
 function drawScene() {
     // ------ Start Initialization --------
     updateState();
-    var program = state.is_shading ? program_with_shade : program_no_shade;
+    // var program = state.is_shading ? program_with_shade : program_no_shade;
+    var program = program_no_shade;
 
     // Get attribute and uniforms locations
     var modelUniformLocation = gl.getUniformLocation(program, "u_model");
@@ -58,11 +59,14 @@ function drawScene() {
     var positionAttribLocation = gl.getAttribLocation(program, "a_position");
     var colorAttribLocation = gl.getAttribLocation(program, "a_color");
     var textureCoordLocation = gl.getAttribLocation(program, "a_texCoord");
-    var textureLocation = gl.getUniformLocation(program, "u_texture");
+    var samplerImageLocation = gl.getUniformLocation(program, "u_samplerImage");
+    var samplerEnvironmentLocation = gl.getUniformLocation(program, "u_samplerEnvironment");
     var worldCameraPositionLocation = gl.getUniformLocation(
         program,
         "u_worldCameraPosition"
     );
+    var textureTypeLocation = gl.getUniformLocation(program, "u_textureMode");
+    var useShadingLocation = gl.getUniformLocation(program, "useShading");
 
     // Set the viewport
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
@@ -84,6 +88,10 @@ function drawScene() {
 
     // ------ End Initialization --------
 
+    gl.uniform1i(textureTypeLocation, state.texture_type);
+
+    gl.uniform1i(useShadingLocation, state.is_shading);
+
     // Define the projection matrix
     var projectionMatrix = m4.orthographic(-1, 1, -1, 1, -1000, 1000);
 
@@ -96,13 +104,13 @@ function drawScene() {
     var cameraDirection = m4.normalize(subtractVectors(cameraPos, target));
     var cameraRight = m4.normalize(cross(up, cameraDirection));
     var cameraUp = cross(cameraDirection, cameraRight);
-    var cameraMatrix = m4.lookAt(
+    var viewMatrix = m4.lookAt(
         cameraPos,
         cameraDirection,
         cameraRight,
         cameraUp
     );
-    var viewMatrix = m4.inverse(cameraMatrix);
+    // viewMatrix = m4.inverse(viewMatrix);
     
 
     // Compute a world matrix
@@ -194,6 +202,9 @@ function drawScene() {
     // Draw the model here
     var model = state.model;
 
+    gl.uniform1i(samplerImageLocation, 0);
+    gl.uniform1i(samplerEnvironmentLocation, 1);
+
     objectDraw(
         gl,
         model.object,
@@ -201,7 +212,6 @@ function drawScene() {
         normalAttribLocation,
         positionAttribLocation,
         colorAttribLocation,
-        textureLocation,
         modelMatrix
     );
 }
@@ -218,7 +228,6 @@ function objectDraw(
     normalAttribLocation,
     positionAttribLocation,
     colorAttribLocation,
-    textureLocation,
     modelMatrix
 ) {
     // Set indices
@@ -243,42 +252,43 @@ function objectDraw(
             3
         );
 
+        gl.vertexAttribPointer(
+            normalAttribLocation,
+            3,
+            gl.FLOAT,
+            false,
+            0,
+            0
+        );
+        gl.enableVertexAttribArray(normalAttribLocation);
+
+        // Set normal buffer
+        var normalArray = [
+            normal[4 * i],
+            normal[4 * i + 1],
+            normal[4 * i + 2],
+            normal[4 * i + 3],
+        ];
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
+        gl.bufferData(
+            gl.ARRAY_BUFFER,
+            new Float32Array(normalArray),
+            gl.STATIC_DRAW
+        );
+
+        gl.uniformMatrix4fv(
+            normalUniformLocation,
+            false,
+            m4.transpose(m4.inverse(modelMatrix))
+        );
+
         if (state.is_shading) {
-            gl.vertexAttribPointer(
-                normalAttribLocation,
-                3,
-                gl.FLOAT,
-                false,
-                0,
-                0
-            );
-            gl.enableVertexAttribArray(normalAttribLocation);
 
-            // Set normal buffer
-            var normalArray = [
-                normal[4 * i],
-                normal[4 * i + 1],
-                normal[4 * i + 2],
-                normal[4 * i + 3],
-            ];
-
-            gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
-            gl.bufferData(
-                gl.ARRAY_BUFFER,
-                new Float32Array(normalArray),
-                gl.STATIC_DRAW
-            );
-
-            gl.uniformMatrix4fv(
-                normalUniformLocation,
-                false,
-                m4.transpose(m4.inverse(modelMatrix))
-            );
         } else {
 
         }
 
-        gl.uniform1i(textureLocation, 0);
         // setBuffer(gl, colorBuffer, model.color[i], colorAttribLocation, 3);
 
         // gl.drawArrays(gl.TRIANGLE_FAN, 0, model.position[i].length / 3);
@@ -293,7 +303,6 @@ function objectDraw(
             normalAttribLocation,
             positionAttribLocation,
             colorAttribLocation,
-            textureLocation,
             modelMatrix
         );
     }

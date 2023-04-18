@@ -52,6 +52,9 @@ function updateState() {
     state.scaling.z = document.getElementById("scaling-z").value;
     state.camera_radius = document.getElementById("camera-radius").value;
     state.camera_angle = document.getElementById("camera-angle").value;
+    state.texture_type = document.querySelector(
+        'input[name="texture"]:checked'
+    ).value;
 }
 
 function resetState() {
@@ -98,7 +101,7 @@ document.getElementById("reset-btn").addEventListener("click", (e) => {
     drawScene();
 });
 
-models = [fox, human, chicken, hollowPrism, filledCube];
+models = [fox, human, chicken, filledCube, filledCube];
 // set listener to model selection radio buttons
 var modelSelection = document.querySelectorAll('input[name="model"]');
 modelSelection.forEach((model) => {
@@ -107,6 +110,14 @@ modelSelection.forEach((model) => {
         state.model_type = "preserved";
         treeview.replaceData(root);
         appendDataFromObject(state.model.object, "root");
+        drawScene();
+    });
+});
+
+var textureSelection = document.querySelectorAll('input[name="texture"]');
+textureSelection.forEach((texture) => {
+    texture.addEventListener("change", (e) => {
+        state.texture_type = e.target.value;
         drawScene();
     });
 });
