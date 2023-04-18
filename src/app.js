@@ -179,7 +179,8 @@ function drawScene() {
         textureCoordBuffer,
         state.model.texture_coords,
         textureCoordLocation,
-        2
+        2,
+        modelMatrix
     );
 
     gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
@@ -200,7 +201,8 @@ function drawScene() {
         normalUniformLocation,
         normalAttribLocation,
         positionAttribLocation,
-        colorAttribLocation
+        colorAttribLocation,
+        modelMatrix
     );
 }
 
@@ -232,7 +234,8 @@ function objectDraw(
     normalUniformLocation,
     normalAttribLocation,
     positionAttribLocation,
-    colorAttribLocation
+    colorAttribLocation,
+    modelMatrix
 ) {
     // Set indices
     var indices = positionToIndices(object.position);
@@ -311,7 +314,8 @@ function objectDraw(
             normalUniformLocation,
             normalAttribLocation,
             positionAttribLocation,
-            colorAttribLocation
+            colorAttribLocation,
+            modelMatrix
         );
     }
 }
