@@ -1,14 +1,10 @@
 // -------- Initial Setup --------
 // Get the canvas element
 var canvas = document.getElementById("canvas");
-var canvas2 = document.getElementById("canvas2");
 
 // Create a WebGL context
 /** @type {WebGLRenderingContext|null} */
 var gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
-/** @type {WebGLRenderingContext|null} */
-var gl2 =
-    canvas2.getContext("webgl") || canvas2.getContext("experimental-webgl");
 
 if (!gl) {
     alert("Your browser does not support WebGL");
@@ -210,26 +206,9 @@ function drawScene() {
     );
 }
 
-function drawScene2() {
-    // Set the viewport
-    // gl2.viewport(0, 0, gl2.canvas2.width, gl2.canvas2.height);
-
-    // Clear the canvas
-    gl2.clearColor(1, 1, 1, 1);
-    gl2.clear(gl2.COLOR_BUFFER_BIT | gl2.DEPTH_BUFFER_BIT);
-
-    // Turn on culling. By default backfacing triangles
-    // will be culled.
-    gl2.enable(gl2.CULL_FACE);
-
-    // Enable the depth buffer
-    gl2.enable(gl2.DEPTH_TEST);
-}
-
 function main() {
     // Scene drawer
     drawScene();
-    drawScene2();
 }
 
 function objectDraw(

@@ -98,13 +98,15 @@ document.getElementById("reset-btn").addEventListener("click", (e) => {
     drawScene();
 });
 
-models = [fox, human, hollowPrism, fox, filledCube];
+models = [fox, human, chicken, hollowPrism, filledCube];
 // set listener to model selection radio buttons
 var modelSelection = document.querySelectorAll('input[name="model"]');
 modelSelection.forEach((model) => {
     model.addEventListener("change", (e) => {
         state.model = models[e.target.value];
         state.model_type = "preserved";
+        treeview.replaceData(root);
+        appendDataFromObject(state.model.object, "root");
         drawScene();
     });
 });
