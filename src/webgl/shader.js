@@ -3,6 +3,7 @@ const vertexShaderText = `
     attribute vec4 a_position;
     attribute vec2 a_texCoord;
     attribute vec4 a_color;
+    attribute vec3 a_normal;
 
     // uniform mat4 u_matrix;
     uniform mat4 u_model;
@@ -11,11 +12,16 @@ const vertexShaderText = `
 
     varying highp vec2 v_texCoord;
     varying highp vec4 v_color;
+    varying vec3 v_worldPosition;
+    varying vec3 v_worldNormal;
     
     void main() {
         gl_Position = u_projection * u_view * u_model * a_position;
         v_texCoord = a_texCoord;
         // v_color = a_color;
+
+        v_worldPosition = (u_model * a_position).xyz;
+        v_worldNormal = mat3(u_model) * a_normal;
     }
 `;
 
@@ -27,9 +33,24 @@ const fragmentShaderText = `
     // Passed in from the vertex shader.
     varying vec4 v_color;
 
+    // Environment
+    varying vec3 v_worldPosition;
+    varying vec3 v_worldNormal;
+
+    uniform samplerCube u_texture;
+    
+    uniform vec3 u_worldCameraPosition;
+
     void main() {
         // gl_FragColor = v_color;
-        gl_FragColor = texture2D(uSampler, v_texCoord);
+        // gl_FragColor = texture2D(uSampler, v_texCoord);
+
+        // Environment Texture
+        vec3 worldNormal = normalize(v_worldNormal);
+        vec3 eyeToSurfaceDir = normalize(v_worldPosition - u_worldCameraPosition);
+        vec3 direction = reflect(eyeToSurfaceDir, worldNormal);
+
+        gl_FragColor = textureCube(u_texture, direction);
     }
 `;
 

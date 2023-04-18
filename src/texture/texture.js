@@ -1,5 +1,5 @@
 function loadTexture(gl, url) {
-    const texture = gl.createTexture();
+    var texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
 
     // Because images have to be downloaded over the internet
@@ -7,14 +7,14 @@ function loadTexture(gl, url) {
     // Until then put a single pixel in the texture so we can
     // use it immediately. When the image has finished downloading
     // we'll update the texture with the contents of the image.
-    const level = 0;
-    const internalFormat = gl.RGBA;
-    const width = 1;
-    const height = 1;
-    const border = 0;
-    const srcFormat = gl.RGBA;
-    const srcType = gl.UNSIGNED_BYTE;
-    const pixel = new Uint8Array([0, 0, 255, 255]); // opaque blue
+    var level = 0;
+    var internalFormat = gl.RGBA;
+    var width = 1;
+    var height = 1;
+    var border = 0;
+    var srcFormat = gl.RGBA;
+    var srcType = gl.UNSIGNED_BYTE;
+    var pixel = new Uint8Array([0, 0, 255, 255]); // opaque blue
     gl.texImage2D(
         gl.TEXTURE_2D,
         level,
@@ -27,7 +27,7 @@ function loadTexture(gl, url) {
         pixel
     );
 
-    const image = new Image();
+    var image = new Image();
     image.onload = () => {
         gl.bindTexture(gl.TEXTURE_2D, texture);
         gl.texImage2D(
@@ -72,10 +72,10 @@ function isPowerOf2(value) {
 }
 
 function initTextureBuffer(gl) {
-    const textureCoordBuffer = gl.createBuffer();
+    var textureCoordBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
 
-    const textureCoordinates = [
+    var textureCoordinates = [
         // Front
         0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
         // Back
@@ -98,3 +98,92 @@ function initTextureBuffer(gl) {
 
     return textureCoordBuffer;
 }
+
+function loadEnvironmentTexture(gl) {
+    var texture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
+
+    // var environtmentFaceInfos = [
+    //     {
+    //       target: gl.TEXTURE_CUBE_MAP_POSITIVE_X,
+    //       url: 'texture/posx.jpg',
+    //     },
+    //     {
+    //       target: gl.TEXTURE_CUBE_MAP_NEGATIVE_X,
+    //       url: 'texture/negx.jpg',
+    //     },
+    //     {
+    //       target: gl.TEXTURE_CUBE_MAP_POSITIVE_Y,
+    //       url: 'texture/posy.jpg',
+    //     },
+    //     {
+    //       target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Y,
+    //       url: 'texture/negy.jpg',
+    //     },
+    //     {
+    //       target: gl.TEXTURE_CUBE_MAP_POSITIVE_Z,
+    //       url: 'texture/posz.jpg',
+    //     },
+    //     {
+    //       target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z,
+    //       url: 'texture/negz.jpg',
+    //     },
+    // ];
+
+
+    environtmentFaceInfos = [
+        {
+          target: gl.TEXTURE_CUBE_MAP_POSITIVE_X,
+          url: 'https://webglfundamentals.org/webgl/resources/images/computer-history-museum/pos-x.jpg',
+        },
+        {
+          target: gl.TEXTURE_CUBE_MAP_NEGATIVE_X,
+          url: 'https://webglfundamentals.org/webgl/resources/images/computer-history-museum/neg-x.jpg',
+        },
+        {
+          target: gl.TEXTURE_CUBE_MAP_POSITIVE_Y,
+          url: 'https://webglfundamentals.org/webgl/resources/images/computer-history-museum/pos-y.jpg',
+        },
+        {
+          target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Y,
+          url: 'https://webglfundamentals.org/webgl/resources/images/computer-history-museum/neg-y.jpg',
+        },
+        {
+          target: gl.TEXTURE_CUBE_MAP_POSITIVE_Z,
+          url: 'https://webglfundamentals.org/webgl/resources/images/computer-history-museum/pos-z.jpg',
+        },
+        {
+          target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z,
+          url: 'https://webglfundamentals.org/webgl/resources/images/computer-history-museum/neg-z.jpg',
+        },
+      ];
+
+    environtmentFaceInfos.forEach((faceInfo) => {
+        var { target, url } = faceInfo;
+
+        var level = 0;
+        var internalFormat = gl.RGBA;
+        var width = 512;
+        var height = 512;
+        var format = gl.RGBA;
+        var type = gl.UNSIGNED_BYTE;
+
+        gl.texImage2D(target, level, internalFormat, width, height, 0, format, type, null);
+
+        var image = new Image();
+        image.src = url;
+        image.crossOrigin = "anonymous";
+        image.addEventListener('load', function () {
+
+        gl.bindTexture(gl.TEXTURE_CUBE_MAP, texture);
+        gl.texImage2D(target, level, internalFormat, format, type, image);
+        gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
+        });
+    });
+
+    gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
+    gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+
+    return texture;
+}
+  

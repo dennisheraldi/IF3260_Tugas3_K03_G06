@@ -13,8 +13,18 @@
     <div class="title">3D WebGL Articulated Model</div>
     <div class="flex-container">
       <div class="flex-item-left">
-        <canvas id="canvas2" width="350px" height="350px" style="border: 1px solid black"> Browser tidak mendukung WebGL </canvas>
-        <canvas id="canvas" width="550px" height="550px" style="border: 1px solid black" class="mt-10"> Browser tidak mendukung WebGL </canvas>
+        <canvas id="canvas2" width="350px" height="350px" style="border: 1px solid black">
+          Browser tidak mendukung WebGL
+        </canvas>
+        <canvas
+          id="canvas"
+          width="550px"
+          height="550px"
+          style="border: 1px solid black"
+          class="mt-10"
+        >
+          Browser tidak mendukung WebGL
+        </canvas>
       </div>
       <div class="flex-item-right">
         <div class="card">
@@ -35,6 +45,10 @@
             <input type="radio" name="model" value="3" id="model4" />
             Model 4
           </label>
+          <label>
+            <input type="radio" name="model" value="4" id="model5" />
+            Filled Cube
+          </label>
           <button id="load-btn">Buka dari file</button>
 
           <button id="save-btn">Save</button>
@@ -44,7 +58,13 @@
           <div class="flex-item-left clear-bg flex60 align-left">
             <div class="h2">Proyeksi</div>
             <label>
-              <input type="radio" name="projection" value="orthographic" checked id="orthographic" />
+              <input
+                type="radio"
+                name="projection"
+                value="orthographic"
+                checked
+                id="orthographic"
+              />
               Orthographic
             </label>
             <label>
@@ -115,7 +135,7 @@
           <div class="h2">Component Tree</div>
           <div class="inner-card">
             <div class="treeview"></div>
-              <div id="display"></div>
+            <div id="display"></div>
           </div>
           <div class="h2">Transformasi</div>
           <div class="inner-flex-container">
@@ -261,152 +281,7 @@
               </div>
             </div>
           </div>
-          <div class="h2 mt-10">Transformasi-S</div>
-          <div class="inner-flex-container">
-            <div class="inner-col-1 inner-card">
-              <div class="col-title">Translasi</div>
-              <div class="slider-container">
-                <div class="slider-item">
-                  <div class="label">x:</div>
-                  <input
-                    id="translasi-x-s"
-                    type="range"
-                    min="-1"
-                    max="1"
-                    step="0.001"
-                    value="0"
-                    class="slider"
-                    oninput="document.getElementById('value-translasi-x').innerHTML = this.value;"
-                  />
-                  <div class="value" id="value-translasi-x">0</div>
-                </div>
-                <div class="slider-item">
-                  <div class="label">y:</div>
-                  <input
-                    id="translasi-y-s"
-                    type="range"
-                    min="-1"
-                    max="1"
-                    step="0.001"
-                    value="0"
-                    class="slider"
-                    oninput="document.getElementById('value-translasi-y').innerHTML = this.value;"
-                  />
-                  <div class="value" id="value-translasi-y">0</div>
-                </div>
-                <div class="slider-item">
-                  <div class="label">z:</div>
-                  <input
-                    id="translasi-z-s"
-                    type="range"
-                    min="-1"
-                    max="1"
-                    step="0.001"
-                    value="0"
-                    class="slider"
-                    oninput="document.getElementById('value-translasi-z').innerHTML = this.value;"
-                  />
-                  <div class="value" id="value-translasi-z">0</div>
-                </div>
-              </div>
-            </div>
-            <div class="inner-col-2 inner-card">
-              <div class="col-title">Rotasi</div>
-              <div class="slider-container">
-                <div class="slider-item">
-                  <div class="label">x:</div>
-                  <input
-                    id="rotasi-x-s"
-                    type="range"
-                    min="-360"
-                    max="360"
-                    step="1"
-                    value="0"
-                    class="slider"
-                    oninput="document.getElementById('value-rotasi-x').innerHTML = this.value;"
-                  />
-                  <div class="value" id="value-rotasi-x">0</div>
-                </div>
-                <div class="slider-item">
-                  <div class="label">y:</div>
-                  <input
-                    id="rotasi-y-s"
-                    type="range"
-                    min="-360"
-                    max="360"
-                    step="1"
-                    value="0"
-                    class="slider"
-                    oninput="document.getElementById('value-rotasi-y').innerHTML = this.value;"
-                  />
-                  <div class="value" id="value-rotasi-y">0</div>
-                </div>
-                <div class="slider-item">
-                  <div class="label">z:</div>
-                  <input
-                    id="rotasi-z-s"
-                    type="range"
-                    min="-360"
-                    max="360"
-                    step="1"
-                    value="0"
-                    class="slider"
-                    oninput="document.getElementById('value-rotasi-z').innerHTML = this.value;"
-                  />
-                  <div class="value" id="value-rotasi-z">0</div>
-                </div>
-              </div>
-            </div>
-            <div class="inner-col-3 inner-card">
-              <div class="col-title">Scaling</div>
-              <div class="slider-container">
-                <div class="slider-item">
-                  <div class="label">x:</div>
-                  <input
-                    id="scaling-x-s"
-                    type="range"
-                    min="0"
-                    max="5"
-                    step="0.01"
-                    value="1"
-                    class="slider"
-                    oninput="document.getElementById('value-scaling-x').innerHTML = this.value;"
-                  />
-                  <div class="value" id="value-scaling-x">1</div>
-                </div>
-                <div class="slider-item">
-                  <div class="label">y:</div>
-                  <input
-                    id="scaling-y-s"
-                    type="range"
-                    min="0"
-                    max="5"
-                    step="0.01"
-                    value="1"
-                    class="slider"
-                    oninput="document.getElementById('value-scaling-y').innerHTML = this.value;"
-                  />
-                  <div class="value" id="value-scaling-y">1</div>
-                </div>
-                <div class="slider-item">
-                  <div class="label">z:</div>
-                  <input
-                    id="scaling-z-s"
-                    type="range"
-                    min="0"
-                    max="5"
-                    step="0.01"
-                    value="1"
-                    class="slider"
-                    oninput="document.getElementById('value-scaling-z').innerHTML = this.value;"
-                  />
-                  <div class="value" id="value-scaling-z">1</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="card">
+
           <div class="h2">Atur Kamera</div>
           <div class="inner-flex-container">
             <div class="inner-col-1 inner-card">
@@ -416,9 +291,9 @@
                   <input
                     id="camera-radius"
                     type="range"
-                    min="-5"
-                    max="5"
-                    step="0.1"
+                    min="1"
+                    max="100"
+                    step="1"
                     value="1"
                     class="slider"
                     oninput="document.getElementById('value-camera-radius').innerHTML = this.value;"
@@ -563,7 +438,6 @@
         </div>
       </div>
     </div>
-    <img hidden id="texture" src="texture/moyai.png"></img>
     <script src="help/bantuan.js"></script>
     <script src="utils/utils.js"></script>
     <script src="utils/mat.js"></script>

@@ -24,7 +24,9 @@ var program_with_shade = createProgram(
 // Program without shading
 var program_no_shade = createProgram(gl, vertexShaderText, fragmentShaderText);
 
-var texture = loadTexture(gl, "texture/sob.png");
+var customTexture = loadTexture(gl, "texture/sob.png");
+
+var environmentTexture = loadEnvironmentTexture(gl);
 
 // Create position buffer
 var positionBuffer = gl.createBuffer();
@@ -35,11 +37,8 @@ var colorBuffer = gl.createBuffer();
 // Create normal buffer
 var normalBuffer = gl.createBuffer();
 
-// Create texture buffer
-var textureBuffer = gl.createBuffer();
-
-// Create texture coordinates buffer
-var textureCoordBuffer = gl.createBuffer();
+// init texture
+var textureCoordBuffer = initTextureBuffer(gl);
 
 // Initialize camera
 var target = [0, 0, 0];
@@ -63,7 +62,11 @@ function drawScene() {
     var positionAttribLocation = gl.getAttribLocation(program, "a_position");
     var colorAttribLocation = gl.getAttribLocation(program, "a_color");
     var textureCoordLocation = gl.getAttribLocation(program, "a_texCoord");
-    // var samplerLocation = gl.getUniformLocation(program, "uSampler");
+    var textureLocation = gl.getUniformLocation(program, "u_texture");
+    var worldCameraPositionLocation = gl.getUniformLocation(
+        program,
+        "u_worldCameraPosition"
+    );
 
     // Set the viewport
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
@@ -86,7 +89,7 @@ function drawScene() {
     // ------ End Initialization --------
 
     // Define the projection matrix
-    var projectionMatrix = m4.orthographic(-1, 1, -1, 1, -5, 5);
+    var projectionMatrix = m4.orthographic(-1, 1, -1, 1, -1000, 1000);
 
     // Define the camera matrix
     var cameraPos = sphericalToCartesian(
@@ -97,12 +100,14 @@ function drawScene() {
     var cameraDirection = m4.normalize(subtractVectors(cameraPos, target));
     var cameraRight = m4.normalize(cross(up, cameraDirection));
     var cameraUp = cross(cameraDirection, cameraRight);
-    var viewMatrix = m4.lookAt(
+    var cameraMatrix = m4.lookAt(
         cameraPos,
         cameraDirection,
         cameraRight,
         cameraUp
     );
+    var viewMatrix = m4.inverse(cameraMatrix);
+    
 
     // Compute a world matrix
     var modelMatrix = m4.identity();
@@ -144,20 +149,19 @@ function drawScene() {
     );
 
     // If the projection is perspective, multiply the matrices
-    state.projection_type = "perspective";
     if (state.projection_type === "perspective") {
         projectionMatrix = m4.perspective(
             degToRad(state.view_field),
             canvas.width / canvas.height,
             0.1,
-            50
+            1000
         );
     } else if (state.projection_type === "oblique") {
         projectionMatrix = m4.oblique(
             state.f_factor,
             degToRad(state.beta_angle),
-            -5,
-            5
+            -1000,
+            1000
         );
     }
 
@@ -167,11 +171,10 @@ function drawScene() {
 
     gl.uniformMatrix4fv(projectionUniformLocation, false, projectionMatrix);
 
+    gl.uniform3fv(worldCameraPositionLocation, cameraPos);
+
     // Set the color to use
     // gl.uniform4fv(colorUniformLocation, [14 / 255, 165 / 255, 233 / 255, 1]); // blue
-
-    // init texture
-    var textureCoordBuffer = initTextureBuffer(gl);
 
     // Set texture coordinate
     setBuffer(
@@ -202,6 +205,7 @@ function drawScene() {
         normalAttribLocation,
         positionAttribLocation,
         colorAttribLocation,
+        textureLocation,
         modelMatrix
     );
 }
@@ -235,6 +239,7 @@ function objectDraw(
     normalAttribLocation,
     positionAttribLocation,
     colorAttribLocation,
+    textureLocation,
     modelMatrix
 ) {
     // Set indices
@@ -291,16 +296,10 @@ function objectDraw(
                 m4.transpose(m4.inverse(modelMatrix))
             );
         } else {
-            // Set color buffer
-            // setBuffer(gl, textureBuffer, texture, textureCoordLocation, 2);
-            // Set the texture.
-            // Tell WebGL we want to affect texture unit 0
-            // gl.activeTexture(gl.TEXTURE0);
-            // Bind the texture to texture unit 0
-            // gl.bindTexture(gl.TEXTURE_2D, texture);
-            // Tell the shader we bound the texture to texture unit 0
-            // gl.uniform1i(samplerLocation, 0);
+
         }
+
+        gl.uniform1i(textureLocation, 0);
         // setBuffer(gl, colorBuffer, model.color[i], colorAttribLocation, 3);
 
         // gl.drawArrays(gl.TRIANGLE_FAN, 0, model.position[i].length / 3);
@@ -315,6 +314,7 @@ function objectDraw(
             normalAttribLocation,
             positionAttribLocation,
             colorAttribLocation,
+            textureLocation,
             modelMatrix
         );
     }

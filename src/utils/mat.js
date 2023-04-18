@@ -300,13 +300,9 @@ var m4 = {
             cameraUp[2],
             cameraDirection[2],
             0,
-            -cameraRight[0] * cameraPos[0] -
-                cameraRight[1] * cameraPos[1] -
-                cameraRight[2] * cameraPos[2],
-            -cameraUp[0] * cameraPos[0] - cameraUp[1] * cameraPos[1] - cameraUp[2] * cameraPos[2],
-            -cameraDirection[0] * cameraPos[0] -
-                cameraDirection[1] * cameraPos[1] -
-                cameraDirection[2] * cameraPos[2],
+            cameraPos[0],
+            cameraPos[1],
+            cameraPos[2],
             1,
         ];
     },
