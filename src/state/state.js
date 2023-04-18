@@ -105,6 +105,8 @@ modelSelection.forEach((model) => {
     model.addEventListener("change", (e) => {
         state.model = models[e.target.value];
         state.model_type = "preserved";
+        treeview.replaceData(root);
+        appendDataFromObject(state.model.object, "root");
         drawScene();
     });
 });
