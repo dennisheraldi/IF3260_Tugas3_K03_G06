@@ -1,7 +1,6 @@
 // -------- Initial Setup --------
 // Get the canvas element
 var canvas = document.getElementById("canvas");
-var canvas2 = document.getElementById("canvas2");
 
 // Create a WebGL context
 /** @type {WebGLRenderingContext|null} */

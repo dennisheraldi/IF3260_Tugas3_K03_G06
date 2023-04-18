@@ -300,20 +300,29 @@ details details {
 }
 .treeview {
     padding: 5pt;
-    border: inset 2px lightGray;
     width: 240pt;
     font: 10pt Arial;
     display: inline-block;
 }
+
+#display {
+    padding: 5pt;
+}
+
 summary[selected="true"] {
     background-color: #0ea5e9;
+    border-radius: 8pt;
+    padding-left: 4pt;
 }
 
 summary {
     cursor: pointer;
+    padding-left: 4pt;
 }
 summary:hover {
     background-color: #74a1cf;
+    border-radius: 8pt;
+    padding-left: 4pt;
 }
 
 summary .icon {
