@@ -121,7 +121,7 @@ document.getElementById("reset-btn").addEventListener("click", (e) => {
     drawScene();
 });
 
-models = [fox, human, chicken, filledCube];
+models = [fox, human, chicken, filledCube, dog];
 // set listener to model selection radio buttons
 var modelSelection = document.querySelectorAll('input[name="model"]');
 modelSelection.forEach((model) => {
