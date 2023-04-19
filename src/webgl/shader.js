@@ -22,6 +22,7 @@ const vertexShaderText = `
     varying vec3 v_worldPosition;
     varying vec3 v_worldNormal;
 
+    varying highp vec3 v_normal;
     varying mat3 v_tbn;
 
     mat3 transpose(in mat3 inMatrix) {
@@ -75,6 +76,8 @@ const fragmentShaderText = `
     uniform samplerCube u_samplerEnvironment;
     uniform sampler2D u_samplerBump;
 
+    varying highp vec3 v_normal;
+
     void main() {
         vec4 v_colorModified = v_color;
         vec3 v_shading = vec3(1.0, 1.0, 1.0);
@@ -94,16 +97,13 @@ const fragmentShaderText = `
         }
         
         if (useShading) {
-            highp vec3 ambientLight = vec3(0.2, 0.2, 0.2);
-            highp vec3 directionalLightColor = vec3(1, 1, 1);
-            highp vec3 directionalVector = normalize(vec3(1.0, 0.0, 1.0));
-      
-            highp vec4 transformedNormal = vec4(worldNormal, 1.0);
-      
-            highp float directional = max(dot(transformedNormal.xyz, directionalVector), 0.0);
-            v_shading = ambientLight + (directionalLightColor * directional);
-            v_colorModified *= vec4(v_shading, 1.0);
-        }
+            vec3 normal = normalize(worldNormal);
+            float directional = max(dot(normal, vec3(1.0, 0.0, 1.0)), 0.0);
+            vec3 ambientLight = vec3(0.3, 0.3, 0.3);
+            vec3 light = ambientLight + directional;
+
+            v_colorModified.rgb *= light;
+        };
         
         gl_FragColor = v_colorModified;
     }

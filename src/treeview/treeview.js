@@ -78,7 +78,12 @@ class Treeview {
         document.getElementById(id).focus();
         document.getElementById(id).click();
     }
+    destroy() {
+        document.querySelector(this.treeviewId).innerHTML = "";
+    }
 }
+
+var selectedComponent = "";
 
 var treeview = new Treeview(".treeview");
 treeview.on("select", (event) => {
@@ -89,7 +94,10 @@ treeview.on("select", (event) => {
     if (data.object != null) {
         data.object = JSON.parse(data.object.replace(/'/g, '"'));
     }
-    console.log(data);
+    state.selected_component = data.label.replace(/\s/g, "");
+    console.log(state.selected_component);
+    console.log(state.object_references[data.label.replace(/\s/g, "")]);
+    // Rotate randomly
 });
 
 var root = {
@@ -108,6 +116,8 @@ function appendDataFromObject(object, parentId) {
         object: JSON.stringify(object).replace(/"/g, "'"),
     };
     treeview.appendData(obj, parentId);
+
+    state.object_references[object.name.replace(/\s/g, "")] = object;
     for (var i = 0; i < object.children.length; i++) {
         appendDataFromObject(object.children[i].object, key);
     }

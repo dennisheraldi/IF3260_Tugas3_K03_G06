@@ -44,6 +44,10 @@ var textureCoordBuffer = initTextureBuffer(gl);
 var target = [0, 0, 0];
 var up = [0, 1, 0];
 
+var objectTarget = state.model.object;
+
+var transformModelView = [];
+
 function drawScene() {
     // ------ Start Initialization --------
     updateState();
@@ -66,7 +70,10 @@ function drawScene() {
     var colorAttribLocation = gl.getAttribLocation(program, "a_color");
     var textureCoordLocation = gl.getAttribLocation(program, "a_texCoord");
     var samplerImageLocation = gl.getUniformLocation(program, "u_samplerImage");
-    var samplerEnvironmentLocation = gl.getUniformLocation(program, "u_samplerEnvironment");
+    var samplerEnvironmentLocation = gl.getUniformLocation(
+        program,
+        "u_samplerEnvironment"
+    );
     var samplerBumpLocation = gl.getUniformLocation(program, "u_samplerBump");
     var worldCameraPositionLocation = gl.getUniformLocation(
         program,
@@ -96,6 +103,7 @@ function drawScene() {
     // ------ End Initialization --------
 
     gl.uniform1i(textureTypeLocation, state.texture_type);
+
 
     gl.uniform1i(useShadingLocation, state.is_shading);
 
@@ -159,13 +167,34 @@ function drawScene() {
         state.translation.z
     );
 
+    if (state.selected_component == "Root") {
+        for (const key in state.object_references) {
+            if (Object.hasOwnProperty.call(state.object_references, key)) {
+                state.object_references[key].model_matrix = Object.assign(
+                    [],
+                    modelMatrix
+                );
+            }
+        }
+    } else {
+        if (
+            Object.hasOwnProperty.call(
+                state.object_references,
+                state.selected_component
+            )
+        ) {
+            state.object_references[state.selected_component].model_matrix =
+                Object.assign([], modelMatrix);
+        }
+    }
+
     // If the projection is perspective, multiply the matrices
     if (state.projection_type === "perspective") {
         projectionMatrix = m4.perspective(
             degToRad(state.view_field),
             canvas.width / canvas.height,
             0.1,
-            1000
+            2000
         );
     } else if (state.projection_type === "oblique") {
         projectionMatrix = m4.oblique(
@@ -176,13 +205,17 @@ function drawScene() {
         );
     }
 
-    gl.uniformMatrix4fv(modelUniformLocation, false, modelMatrix);
-
     gl.uniformMatrix4fv(viewUniformLocation, false, viewMatrix);
 
     gl.uniformMatrix4fv(projectionUniformLocation, false, projectionMatrix);
 
     gl.uniform3fv(worldCameraPositionLocation, cameraPos);
+
+    gl.uniformMatrix4fv(
+        normalUniformLocation,
+        false,
+        m4.transpose(m4.inverse(modelMatrix))
+    );
 
     // Set the color to use
     // gl.uniform4fv(colorUniformLocation, [14 / 255, 165 / 255, 233 / 255, 1]); // blue
@@ -191,23 +224,15 @@ function drawScene() {
     setBuffer(
         gl,
         textureCoordBuffer,
-        state.model.texture_coords,
+        state.model.object.texture_coords,
         textureCoordLocation,
         2,
-        modelMatrix
-    );
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
-    gl.bufferData(
-        gl.ARRAY_BUFFER,
-        new Float32Array(state.model.texture_coords),
-        gl.STATIC_DRAW
     );
 
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 
     // Draw the model here
-    var model = state.model;
+    // var model = state.model;
 
     gl.uniform1i(samplerImageLocation, 0);
     gl.uniform1i(samplerEnvironmentLocation, 1);
@@ -215,7 +240,8 @@ function drawScene() {
 
     objectDraw(
         gl,
-        model.object,
+        objectTarget,
+        modelUniformLocation,
         normalUniformLocation,
         tangentAttribLocation,
         bitangentAttribLocation,
@@ -224,6 +250,7 @@ function drawScene() {
         colorAttribLocation,
         modelMatrix
     );
+    console.log("");
 }
 
 function main() {
@@ -234,143 +261,41 @@ function main() {
 function objectDraw(
     gl,
     object,
+    modelUniformLocation,
     normalUniformLocation,
-    tangentAttribLocation,
-    bitangentAttribLocation,
     normalAttribLocation,
     positionAttribLocation,
-    colorAttribLocation,
-    modelMatrix
+    colorAttribLocation
 ) {
-    // Set indices
-    var indices = positionToIndices(object.position);
-    let indexBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-    gl.bufferData(
-        gl.ELEMENT_ARRAY_BUFFER,
-        new Uint16Array(indices),
-        gl.STATIC_DRAW
+    // Set the object model_matrix
+    var local_model_matrix = m4.multiply(
+        object.model_matrix,
+        state.object_references["Root"].model_matrix
     );
-
-    var vectors = allVectorsObject(object.position.flat(), indices);
-    var tangent = vectors.tangents;
-    var bitangent = vectors.bitangents;
-    var normal = vectors.normals;
+    gl.uniformMatrix4fv(modelUniformLocation, false, local_model_matrix);
 
     for (var i = 0; i < object.position.length; i++) {
+        var coordinates = object.position[i];
+        var normals = calculateNormals(coordinates);
+
         // Set position buffer
-        setBuffer(
-            gl,
-            positionBuffer,
-            object.position[i],
-            positionAttribLocation,
-            3
-        );
-
-        gl.vertexAttribPointer(
-            normalAttribLocation,
-            3,
-            gl.FLOAT,
-            false,
-            0,
-            0
-        );
-        gl.enableVertexAttribArray(normalAttribLocation);
-
-        gl.vertexAttribPointer(
-            tangentAttribLocation,
-            3,
-            gl.FLOAT,
-            false,
-            0,
-            0
-        );
-        gl.enableVertexAttribArray(tangentAttribLocation);
-
-        gl.vertexAttribPointer(
-            bitangentAttribLocation,
-            3,
-            gl.FLOAT,
-            false,
-            0,
-            0
-        );
-        gl.enableVertexAttribArray(bitangentAttribLocation);
+        setBuffer(gl, positionBuffer, coordinates, positionAttribLocation, 3);
 
         // Set normal buffer
-        var normalArray = [
-            normal[4 * i],
-            normal[4 * i + 1],
-            normal[4 * i + 2],
-            normal[4 * i + 3],
-        ];
+        setBuffer(gl, normalBuffer, normals, normalAttribLocation, 3);
 
-        gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
-        gl.bufferData(
-            gl.ARRAY_BUFFER,
-            new Float32Array(normalArray),
-            gl.STATIC_DRAW
-        );
-
-        // Set tangent buffer
-        var tangentArray = [
-            tangent[4 * i],
-            tangent[4 * i + 1],
-            tangent[4 * i + 2],
-            tangent[4 * i + 3],
-        ];
-
-        gl.bindBuffer(gl.ARRAY_BUFFER, tangentBuffer);
-        gl.bufferData(
-            gl.ARRAY_BUFFER,
-            new Float32Array(tangentArray),
-            gl.STATIC_DRAW
-        );
-
-        // Set bitangent buffer
-        var bitangentArray = [
-            bitangent[4 * i],
-            bitangent[4 * i + 1],
-            bitangent[4 * i + 2],
-            bitangent[4 * i + 3],
-        ];
-
-        gl.bindBuffer(gl.ARRAY_BUFFER, bitangentBuffer);
-        gl.bufferData(
-            gl.ARRAY_BUFFER,
-            new Float32Array(bitangentArray),
-            gl.STATIC_DRAW
-        );
-
-        gl.uniformMatrix4fv(
-            normalUniformLocation,
-            false,
-            m4.transpose(m4.inverse(modelMatrix))
-        );
-
-        if (state.is_shading) {
-
-        } else {
-
-        }
-
-        // setBuffer(gl, colorBuffer, model.color[i], colorAttribLocation, 3);
-
-        // gl.drawArrays(gl.TRIANGLE_FAN, 0, model.position[i].length / 3);
-        // gl.drawArrays(gl.TRIANGLES, 0, model.position[i].length / 3);
-        gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
+        gl.drawArrays(gl.TRIANGLE_FAN, 0, object.position[i].length / 3);
     }
+
     for (let i = 0; i < object.children.length; i++) {
         objectDraw(
             gl,
             object.children[i].object,
+            modelUniformLocation,
             normalUniformLocation,
-            tangentAttribLocation,
-            bitangentAttribLocation,
             normalAttribLocation,
             positionAttribLocation,
-            colorAttribLocation,
-            modelMatrix
+            colorAttribLocation
         );
     }
 }
