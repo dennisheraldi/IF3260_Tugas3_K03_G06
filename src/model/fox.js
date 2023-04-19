@@ -42,6 +42,7 @@ var fox = {
         ],
         color: [],
         texture_coords: [],
+        model_matrix: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
         children: [
             {
                 object: {
@@ -87,6 +88,9 @@ var fox = {
                     ],
                     color: [],
                     texture_coords: [],
+                    model_matrix: [
+                        1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
+                    ],
                     children: [
                         {
                             object: {
@@ -132,6 +136,10 @@ var fox = {
                                 ],
                                 color: [],
                                 texture_coords: [],
+                                model_matrix: [
+                                    1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0,
+                                    1,
+                                ],
                                 children: [],
                             },
                         },
@@ -179,6 +187,10 @@ var fox = {
                                 ],
                                 color: [],
                                 texture_coords: [],
+                                model_matrix: [
+                                    1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0,
+                                    1,
+                                ],
                                 children: [],
                             },
                         },
@@ -228,6 +240,10 @@ var fox = {
                                 ],
                                 color: [],
                                 texture_coords: [],
+                                model_matrix: [
+                                    1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0,
+                                    1,
+                                ],
                                 children: [],
                             },
                         },
@@ -291,6 +307,9 @@ var fox = {
                         // bottom face
                         0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
                     ],
+                    model_matrix: [
+                        1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
+                    ],
                     children: [],
                 },
             },
@@ -338,6 +357,9 @@ var fox = {
                     ],
                     color: [],
                     texture_coords: [],
+                    model_matrix: [
+                        1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
+                    ],
                     children: [],
                 },
             },
@@ -385,6 +407,9 @@ var fox = {
                     ],
                     color: [],
                     texture_coords: [],
+                    model_matrix: [
+                        1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
+                    ],
                     children: [],
                 },
             },
@@ -432,6 +457,9 @@ var fox = {
                     ],
                     color: [],
                     texture_coords: [],
+                    model_matrix: [
+                        1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
+                    ],
                     children: [],
                 },
             },
@@ -479,6 +507,9 @@ var fox = {
                     ],
                     color: [],
                     texture_coords: [],
+                    model_matrix: [
+                        1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
+                    ],
                     children: [],
                 },
             },

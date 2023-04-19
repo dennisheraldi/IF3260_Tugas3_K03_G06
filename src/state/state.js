@@ -26,6 +26,8 @@ const initialState = {
     camera_radius: 0,
     camera_angle: 0,
     center_points: [0, 0, 0],
+    selected_component: "",
+    object_references: {},
 };
 
 // freeze initialState
@@ -108,8 +110,11 @@ modelSelection.forEach((model) => {
     model.addEventListener("change", (e) => {
         state.model = models[e.target.value];
         state.model_type = "preserved";
+        treeview.select("root");
+        treeview.destroy();
         treeview.replaceData(root);
         appendDataFromObject(state.model.object, "root");
+        treeview.select("root");
         drawScene();
     });
 });
