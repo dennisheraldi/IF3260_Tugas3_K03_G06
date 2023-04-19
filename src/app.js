@@ -22,6 +22,8 @@ var program_no_shade = createProgram(gl, vertexShaderText, fragmentShaderText);
 
 var customTexture = loadTexture(gl, "texture/sob.png");
 
+var bumpTexture = loadBump(gl, "texture/bump_normal.png");
+
 var environmentTexture = loadEnvironmentTexture(gl);
 
 // Create position buffer
@@ -31,6 +33,8 @@ var positionBuffer = gl.createBuffer();
 var colorBuffer = gl.createBuffer();
 
 // Create normal buffer
+var tangentBuffer = gl.createBuffer();
+var bitangentBuffer = gl.createBuffer();
 var normalBuffer = gl.createBuffer();
 
 // init texture
@@ -55,12 +59,15 @@ function drawScene() {
     );
     var normalUniformLocation = gl.getUniformLocation(program, "u_normal");
 
+    var tangentAttribLocation = gl.getAttribLocation(program, "a_tangent");
+    var bitangentAttribLocation = gl.getAttribLocation(program, "a_bitangent");
     var normalAttribLocation = gl.getAttribLocation(program, "a_normal");
     var positionAttribLocation = gl.getAttribLocation(program, "a_position");
     var colorAttribLocation = gl.getAttribLocation(program, "a_color");
     var textureCoordLocation = gl.getAttribLocation(program, "a_texCoord");
     var samplerImageLocation = gl.getUniformLocation(program, "u_samplerImage");
     var samplerEnvironmentLocation = gl.getUniformLocation(program, "u_samplerEnvironment");
+    var samplerBumpLocation = gl.getUniformLocation(program, "u_samplerBump");
     var worldCameraPositionLocation = gl.getUniformLocation(
         program,
         "u_worldCameraPosition"
@@ -111,7 +118,7 @@ function drawScene() {
         cameraUp
     );
     // viewMatrix = m4.inverse(viewMatrix);
-    
+
 
     // Compute a world matrix
     var modelMatrix = m4.identity();
@@ -204,11 +211,14 @@ function drawScene() {
 
     gl.uniform1i(samplerImageLocation, 0);
     gl.uniform1i(samplerEnvironmentLocation, 1);
+    gl.uniform1i(samplerBumpLocation, 2);
 
     objectDraw(
         gl,
         model.object,
         normalUniformLocation,
+        tangentAttribLocation,
+        bitangentAttribLocation,
         normalAttribLocation,
         positionAttribLocation,
         colorAttribLocation,
@@ -225,6 +235,8 @@ function objectDraw(
     gl,
     object,
     normalUniformLocation,
+    tangentAttribLocation,
+    bitangentAttribLocation,
     normalAttribLocation,
     positionAttribLocation,
     colorAttribLocation,
@@ -240,7 +252,10 @@ function objectDraw(
         gl.STATIC_DRAW
     );
 
-    var normal = normalVectorsObject(object.position.flat(), indices);
+    var vectors = allVectorsObject(object.position.flat(), indices);
+    var tangent = vectors.tangents;
+    var bitangent = vectors.bitangents;
+    var normal = vectors.normals;
 
     for (var i = 0; i < object.position.length; i++) {
         // Set position buffer
@@ -262,6 +277,26 @@ function objectDraw(
         );
         gl.enableVertexAttribArray(normalAttribLocation);
 
+        gl.vertexAttribPointer(
+            tangentAttribLocation,
+            3,
+            gl.FLOAT,
+            false,
+            0,
+            0
+        );
+        gl.enableVertexAttribArray(tangentAttribLocation);
+
+        gl.vertexAttribPointer(
+            bitangentAttribLocation,
+            3,
+            gl.FLOAT,
+            false,
+            0,
+            0
+        );
+        gl.enableVertexAttribArray(bitangentAttribLocation);
+
         // Set normal buffer
         var normalArray = [
             normal[4 * i],
@@ -274,6 +309,36 @@ function objectDraw(
         gl.bufferData(
             gl.ARRAY_BUFFER,
             new Float32Array(normalArray),
+            gl.STATIC_DRAW
+        );
+
+        // Set tangent buffer
+        var tangentArray = [
+            tangent[4 * i],
+            tangent[4 * i + 1],
+            tangent[4 * i + 2],
+            tangent[4 * i + 3],
+        ];
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, tangentBuffer);
+        gl.bufferData(
+            gl.ARRAY_BUFFER,
+            new Float32Array(tangentArray),
+            gl.STATIC_DRAW
+        );
+
+        // Set bitangent buffer
+        var bitangentArray = [
+            bitangent[4 * i],
+            bitangent[4 * i + 1],
+            bitangent[4 * i + 2],
+            bitangent[4 * i + 3],
+        ];
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, bitangentBuffer);
+        gl.bufferData(
+            gl.ARRAY_BUFFER,
+            new Float32Array(bitangentArray),
             gl.STATIC_DRAW
         );
 
@@ -300,6 +365,8 @@ function objectDraw(
             gl,
             object.children[i].object,
             normalUniformLocation,
+            tangentAttribLocation,
+            bitangentAttribLocation,
             normalAttribLocation,
             positionAttribLocation,
             colorAttribLocation,

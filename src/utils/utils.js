@@ -66,26 +66,59 @@ function sphericalToCartesian(theta, phi, r) {
 function normalVectorsObject(vertices, indices) {
     let normals = [];
     for (let i = 0; i < indices.length; i += 3) {
-      let v1 = [
-        vertices[indices[i] * 3],
-        vertices[indices[i] * 3 + 1],
-        vertices[indices[i] * 3 + 2],
-      ];
-      let v2 = [
-        vertices[indices[i + 1] * 3],
-        vertices[indices[i + 1] * 3 + 1],
-        vertices[indices[i + 1] * 3 + 2],
-      ];
-      let v3 = [
-        vertices[indices[i + 2] * 3],
-        vertices[indices[i + 2] * 3 + 1],
-        vertices[indices[i + 2] * 3 + 2],
-      ];
-  
-      let normal = normalVector(v1, v2, v3);
-  
-      normals.push(normal, normal);
+        let v1 = [
+            vertices[indices[i] * 3],
+            vertices[indices[i] * 3 + 1],
+            vertices[indices[i] * 3 + 2],
+        ];
+        let v2 = [
+            vertices[indices[i + 1] * 3],
+            vertices[indices[i + 1] * 3 + 1],
+            vertices[indices[i + 1] * 3 + 2],
+        ];
+        let v3 = [
+            vertices[indices[i + 2] * 3],
+            vertices[indices[i + 2] * 3 + 1],
+            vertices[indices[i + 2] * 3 + 2],
+        ];
+
+        let normal = normalVector(v1, v2, v3);
+
+        normals.push(normal, normal);
     }
-  
+
     return normals;
-  }
+}
+
+function allVectorsObject(vertices, indices) {
+    let tangents = [];
+    let bitangents = [];
+    let normals = [];
+    for (let i = 0; i < indices.length; i += 3) {
+        let v1 = [
+            vertices[indices[i] * 3],
+            vertices[indices[i] * 3 + 1],
+            vertices[indices[i] * 3 + 2],
+        ];
+        let v2 = [
+            vertices[indices[i + 1] * 3],
+            vertices[indices[i + 1] * 3 + 1],
+            vertices[indices[i + 1] * 3 + 2],
+        ];
+        let v3 = [
+            vertices[indices[i + 2] * 3],
+            vertices[indices[i + 2] * 3 + 1],
+            vertices[indices[i + 2] * 3 + 2],
+        ];
+
+        let tangent = normalize(subtractVectors(v2, v1));
+        let bitangent = normalize(subtractVectors(v3, v1));
+        let normal = normalVector(v1, v2, v3);
+
+        tangents.push(tangent, tangent);
+        bitangents.push(bitangent, bitangent);
+        normals.push(normal, normal);
+    }
+
+    return { tangents, bitangents, normals };
+}
