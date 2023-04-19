@@ -19,6 +19,8 @@ const vertexShaderText = `
     varying highp vec3 v_shading;
     varying vec3 v_worldPosition;
     varying vec3 v_worldNormal;
+
+    varying highp vec3 v_normal;
     
     void main() {
         gl_Position = u_projection * u_view * u_model * a_position;
@@ -26,16 +28,7 @@ const vertexShaderText = `
         v_texCoord = a_texCoord;
         v_color = vec4(0.3, 0.6, 0.7, 1.0);
 
-        if (useShading) {
-            highp vec3 ambientLight = vec3(0.6, 0.6, 0.6);
-            highp vec3 directionalLightColor = vec3(1, 1, 1);
-            highp vec3 directionalVector = normalize(vec3(1.0, 0.0, 1.0));
-      
-            highp vec4 transformedNormal = u_normal * vec4(a_normal, 1.0);
-      
-            highp float directional = max(dot(transformedNormal.xyz, directionalVector), 0.0);
-            v_shading = ambientLight + (directionalLightColor * directional);
-        }
+
         v_worldPosition = (u_model * a_position).xyz;
         v_worldNormal = mat3(u_model) * a_normal;
     }
@@ -66,6 +59,8 @@ const fragmentShaderText = `
     uniform sampler2D u_samplerImage;
     uniform samplerCube u_samplerEnvironment;
 
+    varying highp vec3 v_normal;
+
     void main() {
         vec4 v_colorModified = v_color;
 
@@ -81,7 +76,14 @@ const fragmentShaderText = `
             // TODO
         }
 
-        if (useShading) v_colorModified *= vec4(v_shading, 1.0);
+        if (useShading) {
+            vec3 normal = normalize(v_worldNormal);
+            float directional = max(dot(normal, vec3(1.0, 0.0, 1.0)), 0.0);
+            vec3 ambientLight = vec3(0.3, 0.3, 0.3);
+            vec3 light = ambientLight + directional;
+
+            v_colorModified.rgb *= light;
+        };
 
         gl_FragColor = v_colorModified;
     }

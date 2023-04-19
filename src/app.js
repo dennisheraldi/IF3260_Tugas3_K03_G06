@@ -90,6 +90,7 @@ function drawScene() {
 
     gl.uniform1i(textureTypeLocation, state.texture_type);
 
+
     gl.uniform1i(useShadingLocation, state.is_shading);
 
     // Define the projection matrix
@@ -158,7 +159,7 @@ function drawScene() {
             degToRad(state.view_field),
             canvas.width / canvas.height,
             0.1,
-            1000
+            2000
         );
     } else if (state.projection_type === "oblique") {
         projectionMatrix = m4.oblique(
@@ -177,6 +178,12 @@ function drawScene() {
 
     gl.uniform3fv(worldCameraPositionLocation, cameraPos);
 
+    gl.uniformMatrix4fv(
+        normalUniformLocation,
+        false,
+        m4.transpose(m4.inverse(modelMatrix))
+    );
+
     // Set the color to use
     // gl.uniform4fv(colorUniformLocation, [14 / 255, 165 / 255, 233 / 255, 1]); // blue
 
@@ -184,17 +191,9 @@ function drawScene() {
     setBuffer(
         gl,
         textureCoordBuffer,
-        state.model.texture_coords,
+        state.model.object.texture_coords,
         textureCoordLocation,
         2,
-        modelMatrix
-    );
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
-    gl.bufferData(
-        gl.ARRAY_BUFFER,
-        new Float32Array(state.model.texture_coords),
-        gl.STATIC_DRAW
     );
 
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
@@ -230,71 +229,33 @@ function objectDraw(
     colorAttribLocation,
     modelMatrix
 ) {
-    // Set indices
-    var indices = positionToIndices(object.position);
-    let indexBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-    gl.bufferData(
-        gl.ELEMENT_ARRAY_BUFFER,
-        new Uint16Array(indices),
-        gl.STATIC_DRAW
-    );
-
-    var normal = normalVectorsObject(object.position.flat(), indices);
 
     for (var i = 0; i < object.position.length; i++) {
+        var coordinates = object.position[i];
+        var normals = calculateNormals(coordinates)
+
         // Set position buffer
         setBuffer(
             gl,
             positionBuffer,
-            object.position[i],
+            coordinates,
             positionAttribLocation,
-            3
+            3,
         );
-
-        gl.vertexAttribPointer(
+    
+        // Set normal buffer
+        setBuffer(
+            gl,
+            normalBuffer,
+            normals,
             normalAttribLocation,
             3,
-            gl.FLOAT,
-            false,
-            0,
-            0
-        );
-        gl.enableVertexAttribArray(normalAttribLocation);
-
-        // Set normal buffer
-        var normalArray = [
-            normal[4 * i],
-            normal[4 * i + 1],
-            normal[4 * i + 2],
-            normal[4 * i + 3],
-        ];
-
-        gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
-        gl.bufferData(
-            gl.ARRAY_BUFFER,
-            new Float32Array(normalArray),
-            gl.STATIC_DRAW
         );
 
-        gl.uniformMatrix4fv(
-            normalUniformLocation,
-            false,
-            m4.transpose(m4.inverse(modelMatrix))
-        );
 
-        if (state.is_shading) {
-
-        } else {
-
-        }
-
-        // setBuffer(gl, colorBuffer, model.color[i], colorAttribLocation, 3);
-
-        // gl.drawArrays(gl.TRIANGLE_FAN, 0, model.position[i].length / 3);
-        // gl.drawArrays(gl.TRIANGLES, 0, model.position[i].length / 3);
-        gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
+        gl.drawArrays(gl.TRIANGLE_FAN, 0, object.position[i].length / 3);
     }
+
     for (let i = 0; i < object.children.length; i++) {
         objectDraw(
             gl,
