@@ -263,6 +263,8 @@ function objectDraw(
     object,
     modelUniformLocation,
     normalUniformLocation,
+    tangentAttribLocation,
+    bitangentAttribLocation,
     normalAttribLocation,
     positionAttribLocation,
     colorAttribLocation
@@ -276,12 +278,18 @@ function objectDraw(
 
     for (var i = 0; i < object.position.length; i++) {
         var coordinates = object.position[i];
-        var normals = calculateNormals(coordinates);
+        var vectors = calculateTBN(coordinates);
+        var tangents = vectors.tangents;
+        var bitangents = vectors.bitangents;
+        var normals = vectors.normals;
 
         // Set position buffer
         setBuffer(gl, positionBuffer, coordinates, positionAttribLocation, 3);
 
-        // Set normal buffer
+        setBuffer(gl, tangentBuffer, tangents, tangentAttribLocation, 3);
+
+        setBuffer(gl, bitangentBuffer, bitangents, bitangentAttribLocation, 3);
+
         setBuffer(gl, normalBuffer, normals, normalAttribLocation, 3);
 
         gl.drawArrays(gl.TRIANGLE_FAN, 0, object.position[i].length / 3);
@@ -293,6 +301,8 @@ function objectDraw(
             object.children[i].object,
             modelUniformLocation,
             normalUniformLocation,
+            tangentAttribLocation,
+            bitangentAttribLocation,
             normalAttribLocation,
             positionAttribLocation,
             colorAttribLocation

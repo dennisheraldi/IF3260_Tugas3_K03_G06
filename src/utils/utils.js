@@ -127,3 +127,107 @@ function calculateNormals(positions) {
 
     return normals;
 }
+
+function calculateTBN(positions) {
+    const tangents = [];
+    const bitangents = [];
+    const normals = [];
+
+    // Create a zero-filled array to store the normal vectors for each vertex
+    for (let i = 0; i < positions.length; i += 3) {
+        tangents.push(0, 0, 0);
+        bitangents.push(0, 0, 0);
+        normals.push(0, 0, 0);
+    }
+
+    // Calculate the normal vectors for each face
+    for (let i = 0; i < positions.length; i += 12) {
+        // Get the positions of the three vertices for this face
+        const p1 = positions.slice(i, i + 3);
+        const p2 = positions.slice(i + 3, i + 6);
+        const p3 = positions.slice(i + 6, i + 9);
+
+        const tangent = subtractVectors(p2, p1);
+        const bitangent = subtractVectors(p3, p1);
+
+        // Add the tangent vector for this face to each of its vertices
+        tangents[i] += tangent[0];
+        tangents[i + 1] += tangent[1];
+        tangents[i + 2] += tangent[2];
+        tangents[i + 3] += tangent[0];
+        tangents[i + 4] += tangent[1];
+        tangents[i + 5] += tangent[2];
+        tangents[i + 6] += tangent[0];
+        tangents[i + 7] += tangent[1];
+        tangents[i + 8] += tangent[2];
+        tangents[i + 9] += tangent[0];
+        tangents[i + 10] += tangent[1];
+        tangents[i + 11] += tangent[2];
+
+        // Add the bitangent vector for this face to each of its vertices
+        bitangents[i] += bitangent[0];
+        bitangents[i + 1] += bitangent[1];
+        bitangents[i + 2] += bitangent[2];
+        bitangents[i + 3] += bitangent[0];
+        bitangents[i + 4] += bitangent[1];
+        bitangents[i + 5] += bitangent[2];
+        bitangents[i + 6] += bitangent[0];
+        bitangents[i + 7] += bitangent[1];
+        bitangents[i + 8] += bitangent[2];
+        bitangents[i + 9] += bitangent[0];
+        bitangents[i + 10] += bitangent[1];
+        bitangents[i + 11] += bitangent[2];
+
+        // Calculate the normal vector for this face
+        const v1 = [p2[0] - p1[0], p2[1] - p1[1], p2[2] - p1[2]];
+        const v2 = [p3[0] - p1[0], p3[1] - p1[1], p3[2] - p1[2]];
+        const normal = [
+            v1[1] * v2[2] - v1[2] * v2[1],
+            v1[2] * v2[0] - v1[0] * v2[2],
+            v1[0] * v2[1] - v1[1] * v2[0],
+        ];
+
+        // Add the normal vector for this face to each of its vertices
+        normals[i] += normal[0];
+        normals[i + 1] += normal[1];
+        normals[i + 2] += normal[2];
+        normals[i + 3] += normal[0];
+        normals[i + 4] += normal[1];
+        normals[i + 5] += normal[2];
+        normals[i + 6] += normal[0];
+        normals[i + 7] += normal[1];
+        normals[i + 8] += normal[2];
+        normals[i + 9] += normal[0];
+        normals[i + 10] += normal[1];
+        normals[i + 11] += normal[2];
+    }
+
+    // Normalize the vectors for each vertex
+    for (let i = 0; i < normals.length; i += 3) {
+        const x = normals[i];
+        const y = normals[i + 1];
+        const z = normals[i + 2];
+        const length = Math.sqrt(x * x + y * y + z * z);
+        normals[i] /= length;
+        normals[i + 1] /= length;
+        normals[i + 2] /= length;
+
+        const tx = tangents[i];
+        const ty = tangents[i + 1];
+        const tz = tangents[i + 2];
+        const tlength = Math.sqrt(tx * tx + ty * ty + tz * tz);
+        tangents[i] /= tlength;
+        tangents[i + 1] /= tlength;
+        tangents[i + 2] /= tlength;
+
+        const bx = bitangents[i];
+        const by = bitangents[i + 1];
+        const bz = bitangents[i + 2];
+        const blength = Math.sqrt(bx * bx + by * by + bz * bz);
+        bitangents[i] /= blength;
+        bitangents[i + 1] /= blength;
+        bitangents[i + 2] /= blength;
+    }
+
+    return { tangents, bitangents, normals };
+}
