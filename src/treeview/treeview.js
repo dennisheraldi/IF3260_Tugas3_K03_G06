@@ -95,9 +95,60 @@ treeview.on("select", (event) => {
         data.object = JSON.parse(data.object.replace(/'/g, '"'));
     }
     state.selected_component = data.label.replace(/\s/g, "");
-    console.log(state.selected_component);
-    console.log(state.object_references[data.label.replace(/\s/g, "")]);
-    // Rotate randomly
+    // console.log(state.selected_component);
+    // console.log(state.object_references[data.label.replace(/\s/g, "")]);
+    document.getElementById("rotasi-x").value =
+        state.object_references[state.selected_component].transform.rotation.x;
+    document.getElementById("value-rotasi-x").innerHTML =
+        state.object_references[state.selected_component].transform.rotation.x;
+    document.getElementById("rotasi-y").value =
+        state.object_references[state.selected_component].transform.rotation.y;
+    document.getElementById("value-rotasi-y").innerHTML =
+        state.object_references[state.selected_component].transform.rotation.y;
+    document.getElementById("rotasi-z").value =
+        state.object_references[state.selected_component].transform.rotation.z;
+    document.getElementById("value-rotasi-z").innerHTML =
+        state.object_references[state.selected_component].transform.rotation.z;
+    document.getElementById("translasi-x").value =
+        state.object_references[
+            state.selected_component
+        ].transform.translation.x;
+    document.getElementById("value-translasi-x").innerHTML =
+        state.object_references[
+            state.selected_component
+        ].transform.translation.x;
+    document.getElementById("translasi-y").value =
+        state.object_references[
+            state.selected_component
+        ].transform.translation.y;
+    document.getElementById("value-translasi-y").innerHTML =
+        state.object_references[
+            state.selected_component
+        ].transform.translation.y;
+    document.getElementById("translasi-z").value =
+        state.object_references[
+            state.selected_component
+        ].transform.translation.z;
+    document.getElementById("value-translasi-z").innerHTML =
+        state.object_references[
+            state.selected_component
+        ].transform.translation.z;
+    document.getElementById("scaling-x").value =
+        state.object_references[state.selected_component].transform.scaling.x;
+    document.getElementById("value-scaling-x").innerHTML =
+        state.object_references[state.selected_component].transform.scaling.x;
+    document.getElementById("scaling-y").value =
+        state.object_references[state.selected_component].transform.scaling.y;
+    document.getElementById("value-scaling-y").innerHTML =
+        state.object_references[state.selected_component].transform.scaling.y;
+    document.getElementById("scaling-z").value =
+        state.object_references[state.selected_component].transform.scaling.z;
+    document.getElementById("value-scaling-z").innerHTML =
+        state.object_references[state.selected_component].transform.scaling.z;
+
+    centerPoints = centerOfMass(
+        state.object_references[state.selected_component].position
+    );
 });
 
 var root = {

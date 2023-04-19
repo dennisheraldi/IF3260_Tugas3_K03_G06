@@ -9,13 +9,6 @@ var gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
 if (!gl) {
     alert("Your browser does not support WebGL");
 }
-// Setup GLSL program
-// Program with shading
-// var program_with_shade = createProgram(
-//     gl,
-//     vertexShaderTextShading,
-//     fragmentShaderTextShading
-// );
 
 // Program without shading
 var program_no_shade = createProgram(gl, vertexShaderText, fragmentShaderText);
@@ -40,14 +33,12 @@ var textureCoordBuffer = initTextureBuffer(gl);
 var target = [0, 0, 0];
 var up = [0, 1, 0];
 
-var objectTarget = state.model.object;
-
-var transformModelView = [];
+var centerPoints = centerOfMass([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
 
 function drawScene() {
     // ------ Start Initialization --------
     updateState();
-    // var program = state.is_shading ? program_with_shade : program_no_shade;
+
     var program = program_no_shade;
 
     // Get attribute and uniforms locations
@@ -97,7 +88,6 @@ function drawScene() {
 
     gl.uniform1i(textureTypeLocation, state.texture_type);
 
-
     gl.uniform1i(useShadingLocation, state.is_shading);
 
     // Define the projection matrix
@@ -125,59 +115,71 @@ function drawScene() {
 
     modelMatrix = m4.scale(
         modelMatrix,
-        state.scaling.x,
-        state.scaling.y,
-        state.scaling.z
+        state.object_references[state.selected_component].transform.scaling.x,
+        state.object_references[state.selected_component].transform.scaling.y,
+        state.object_references[state.selected_component].transform.scaling.z
     );
 
-    if (state.model_type === "loaded") {
+    // calculate center point of the object
+
+    if (state.selected_component != "Root") {
         modelMatrix = m4.translate(
             modelMatrix,
-            state.center_points[0] * -1,
-            state.center_points[1] * -1,
-            state.center_points[2] * -1
+            centerPoints[0] * -1,
+            centerPoints[1] * -1,
+            centerPoints[2] * -1
         );
     }
 
-    modelMatrix = m4.xRotate(modelMatrix, degToRad(state.rotation.x));
-    modelMatrix = m4.yRotate(modelMatrix, degToRad(state.rotation.y));
-    modelMatrix = m4.zRotate(modelMatrix, degToRad(state.rotation.z));
+    modelMatrix = m4.xRotate(
+        modelMatrix,
+        degToRad(
+            state.object_references[state.selected_component].transform.rotation
+                .x
+        )
+    );
+    modelMatrix = m4.yRotate(
+        modelMatrix,
+        degToRad(
+            state.object_references[state.selected_component].transform.rotation
+                .y
+        )
+    );
+    modelMatrix = m4.zRotate(
+        modelMatrix,
+        degToRad(
+            state.object_references[state.selected_component].transform.rotation
+                .z
+        )
+    );
 
-    if (state.model_type === "loaded") {
+    if (state.selected_component != "Root") {
         modelMatrix = m4.translate(
             modelMatrix,
-            state.center_points[0],
-            state.center_points[1],
-            state.center_points[2]
+            centerPoints[0] * 1,
+            centerPoints[1] * 1,
+            centerPoints[2] * 1
         );
     }
 
     modelMatrix = m4.translate(
         modelMatrix,
-        state.translation.x,
-        state.translation.y,
-        state.translation.z
+        state.object_references[state.selected_component].transform.translation
+            .x,
+        state.object_references[state.selected_component].transform.translation
+            .y,
+        state.object_references[state.selected_component].transform.translation
+            .z
     );
 
-    if (state.selected_component == "Root") {
-        for (const key in state.object_references) {
-            if (Object.hasOwnProperty.call(state.object_references, key)) {
-                state.object_references[key].model_matrix = Object.assign(
-                    [],
-                    modelMatrix
-                );
-            }
-        }
-    } else {
-        if (
-            Object.hasOwnProperty.call(
-                state.object_references,
-                state.selected_component
-            )
-        ) {
-            state.object_references[state.selected_component].model_matrix =
-                Object.assign([], modelMatrix);
-        }
+    if (
+        Object.hasOwnProperty.call(
+            state.object_references,
+            state.selected_component
+        )
+    ) {
+        state.object_references[state.selected_component].model_matrix =
+            Object.assign([], modelMatrix);
     }
 
     // If the projection is perspective, multiply the matrices
@@ -218,28 +220,23 @@ function drawScene() {
         textureCoordBuffer,
         state.model.object.texture_coords,
         textureCoordLocation,
-        2,
+        2
     );
 
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-
-    // Draw the model here
-    // var model = state.model;
 
     gl.uniform1i(samplerImageLocation, 0);
     gl.uniform1i(samplerEnvironmentLocation, 1);
 
     objectDraw(
         gl,
-        objectTarget,
+        state.model.object,
         modelUniformLocation,
         normalUniformLocation,
         normalAttribLocation,
         positionAttribLocation,
-        colorAttribLocation,
-        modelMatrix
+        colorAttribLocation
     );
-    console.log("");
 }
 
 function main() {
@@ -254,35 +251,24 @@ function objectDraw(
     normalUniformLocation,
     normalAttribLocation,
     positionAttribLocation,
-    colorAttribLocation,
-    modelMatrix
+    colorAttribLocation
 ) {
-
     // Set the object model_matrix
-    gl.uniformMatrix4fv(modelUniformLocation, false, object.model_matrix);
+    var local_model_matrix = m4.multiply(
+        object.model_matrix,
+        state.object_references["Root"].model_matrix
+    );
+    gl.uniformMatrix4fv(modelUniformLocation, false, local_model_matrix);
 
     for (var i = 0; i < object.position.length; i++) {
         var coordinates = object.position[i];
-        var normals = calculateNormals(coordinates)
+        var normals = calculateNormals(coordinates);
 
         // Set position buffer
-        setBuffer(
-            gl,
-            positionBuffer,
-            coordinates,
-            positionAttribLocation,
-            3,
-        );
-    
-        // Set normal buffer
-        setBuffer(
-            gl,
-            normalBuffer,
-            normals,
-            normalAttribLocation,
-            3,
-        );
+        setBuffer(gl, positionBuffer, coordinates, positionAttribLocation, 3);
 
+        // Set normal buffer
+        setBuffer(gl, normalBuffer, normals, normalAttribLocation, 3);
 
         gl.drawArrays(gl.TRIANGLE_FAN, 0, object.position[i].length / 3);
     }
@@ -295,8 +281,7 @@ function objectDraw(
             normalUniformLocation,
             normalAttribLocation,
             positionAttribLocation,
-            colorAttribLocation,
-            modelMatrix
+            colorAttribLocation
         );
     }
 }

@@ -43,6 +43,23 @@ function updateState() {
     state.is_shading = document.querySelector(
         '.toggle-switch input[type="checkbox"]'
     ).checked;
+    state.object_references[state.selected_component].transform = {
+        rotation: {
+            x: document.getElementById("rotasi-x").value,
+            y: document.getElementById("rotasi-y").value,
+            z: document.getElementById("rotasi-z").value,
+        },
+        translation: {
+            x: document.getElementById("translasi-x").value,
+            y: document.getElementById("translasi-y").value,
+            z: document.getElementById("translasi-z").value,
+        },
+        scaling: {
+            x: document.getElementById("scaling-x").value,
+            y: document.getElementById("scaling-y").value,
+            z: document.getElementById("scaling-z").value,
+        },
+    };
     state.rotation.x = document.getElementById("rotasi-x").value;
     state.rotation.y = document.getElementById("rotasi-y").value;
     state.rotation.z = document.getElementById("rotasi-z").value;
@@ -93,6 +110,7 @@ function resetState() {
     document.getElementById("camera-angle").value = state.camera_angle;
     document.getElementById("value-camera-angle").innerHTML =
         state.camera_angle;
+    treeview.select("root");
 }
 
 // set listener to reset-btn
@@ -103,7 +121,7 @@ document.getElementById("reset-btn").addEventListener("click", (e) => {
     drawScene();
 });
 
-models = [fox, human, chicken, filledCube, filledCube];
+models = [fox, human, chicken, filledCube];
 // set listener to model selection radio buttons
 var modelSelection = document.querySelectorAll('input[name="model"]');
 modelSelection.forEach((model) => {
