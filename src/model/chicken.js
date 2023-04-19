@@ -31,6 +31,7 @@ var chicken = {
             ],
         ],
         color: [],
+        texture_type: 0,
         texture_coords: [],
         model_matrix: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
         transform: {
@@ -87,6 +88,7 @@ var chicken = {
                         ],
                     ],
                     color: [],
+                    texture_type: 0,
                     texture_coords: [],
                     model_matrix: [
                         1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
@@ -147,6 +149,7 @@ var chicken = {
                         ],
                     ],
                     color: [],
+                    texture_type: 0,
                     texture_coords: [],
                     model_matrix: [
                         1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
@@ -207,6 +210,7 @@ var chicken = {
                         ],
                     ],
                     color: [],
+                    texture_type: 0,
                     texture_coords: [],
                     model_matrix: [
                         1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
@@ -265,6 +269,7 @@ var chicken = {
                                     ],
                                 ],
                                 color: [],
+                                texture_type: 0,
                                 texture_coords: [],
                                 model_matrix: [
                                     1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0,
@@ -329,6 +334,7 @@ var chicken = {
                         ],
                     ],
                     color: [],
+                    texture_type: 0,
                     texture_coords: [],
                     model_matrix: [
                         1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
@@ -387,6 +393,7 @@ var chicken = {
                                     ],
                                 ],
                                 color: [],
+                                texture_type: 0,
                                 texture_coords: [],
                                 model_matrix: [
                                     1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0,
@@ -451,6 +458,7 @@ var chicken = {
                         ],
                     ],
                     color: [],
+                    texture_type: 0,
                     texture_coords: [],
                     model_matrix: [
                         1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
@@ -509,6 +517,7 @@ var chicken = {
                                     ],
                                 ],
                                 color: [],
+                                texture_type: 0,
                                 texture_coords: [],
                                 model_matrix: [
                                     1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0,
@@ -574,6 +583,7 @@ var chicken = {
                                                 ],
                                             ],
                                             color: [],
+                                            texture_type: 0,
                                             texture_coords: [],
                                             model_matrix: [
                                                 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,

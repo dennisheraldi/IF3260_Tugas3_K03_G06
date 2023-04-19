@@ -42,6 +42,7 @@ var human = {
     ],
         color: [],
         texture_coords: [],
+        texture_type: 0,
         model_matrix: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
         transform: {
             rotation: {
@@ -105,6 +106,7 @@ var human = {
           ],
                     color: [],
                     texture_coords: [],
+                    texture_type: 0,
                     model_matrix: [
                         1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
                     ],
@@ -172,6 +174,7 @@ var human = {
           ],
                     color: [],
                     texture_coords: [],
+                    texture_type: 0,
                     model_matrix: [
                         1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
                     ],
@@ -238,6 +241,7 @@ var human = {
                 ],
                                 color: [],
                                 texture_coords: [],
+                                texture_type: 0,
                                 model_matrix: [
                                     1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0,
                                     1,
@@ -309,6 +313,7 @@ var human = {
           ],
                     color: [],
                     texture_coords: [],
+                    texture_type: 0,
                     model_matrix: [
                         1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
                     ],
@@ -375,6 +380,7 @@ var human = {
                 ],
                                 color: [],
                                 texture_coords: [],
+                                texture_type: 0,
                                 model_matrix: [
                                     1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0,
                                     1,
@@ -442,6 +448,7 @@ var human = {
                       ],
                                             color: [],
                                             texture_coords: [],
+                                            texture_type: 0,
                                             model_matrix: [
                                                 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
                                                 0, 0, 0, 0, 1,
@@ -518,6 +525,7 @@ var human = {
           ],
                     color: [],
                     texture_coords: [],
+                    texture_type: 0,
                     model_matrix: [
                         1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
                     ],
@@ -587,6 +595,7 @@ var human = {
           ],
                     color: [],
                     texture_coords: [],
+                    texture_type: 0,
                     model_matrix: [
                         1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
                     ],

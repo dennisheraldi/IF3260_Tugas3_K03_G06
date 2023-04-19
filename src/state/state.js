@@ -66,6 +66,10 @@ function resetState() {
     document.getElementById("value-camera-angle").innerHTML =
         state.camera_angle;
     treeview.select("root");
+    treeview.destroy();
+    treeview.replaceData(root);
+    appendDataFromObject(state.model.object, "root");
+    treeview.select("root");
 }
 
 // set listener to reset-btn
@@ -95,7 +99,17 @@ modelSelection.forEach((model) => {
 var textureSelection = document.querySelectorAll('input[name="texture"]');
 textureSelection.forEach((texture) => {
     texture.addEventListener("change", (e) => {
-        state.texture_type = e.target.value;
+        state.object_references[state.selected_component].texture_type =
+            e.target.value;
+
+        // change all texture type if root
+        if (state.selected_component == "Root") {
+            for (const key in state.object_references) {
+                if (state.object_references.hasOwnProperty(key)) {
+                    state.object_references[key].texture_type = e.target.value;
+                }
+            }
+        }
         drawScene();
     });
 });

@@ -146,6 +146,16 @@ treeview.on("select", (event) => {
     document.getElementById("value-scaling-z").innerHTML =
         state.object_references[state.selected_component].transform.scaling.z;
 
+    document.querySelectorAll('input[name="texture"]').forEach((el) => {
+        // check radiobutton based on texture_type
+        if (
+            el.value ==
+            state.object_references[state.selected_component].texture_type
+        ) {
+            el.checked = true;
+        }
+    });
+
     centerPoints = centerOfMass(
         state.object_references[state.selected_component].position
     );

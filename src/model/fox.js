@@ -67,7 +67,6 @@ var fox = {
                         ]
                     ],
                     color: [],
-
                     texture_type: 0,
                     texture_coords: [],
                     model_matrix: [
@@ -344,7 +343,6 @@ var fox = {
                                                 
                                             ],
                                             color: [],
-
                                             texture_type: 0,
                                             texture_coords: [],
                                             model_matrix: [
