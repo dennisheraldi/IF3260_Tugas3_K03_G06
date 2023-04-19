@@ -136,27 +136,27 @@ function loadEnvironmentTexture(gl) {
     environtmentFaceInfos = [
         {
           target: gl.TEXTURE_CUBE_MAP_POSITIVE_X,
-          url: 'https://webglfundamentals.org/webgl/resources/images/computer-history-museum/pos-x.jpg',
+          url: 'texture/posx.jpg',
         },
         {
           target: gl.TEXTURE_CUBE_MAP_NEGATIVE_X,
-          url: 'https://webglfundamentals.org/webgl/resources/images/computer-history-museum/neg-x.jpg',
+          url: 'texture/negx.jpg',
         },
         {
           target: gl.TEXTURE_CUBE_MAP_POSITIVE_Y,
-          url: 'https://webglfundamentals.org/webgl/resources/images/computer-history-museum/pos-y.jpg',
+          url: 'texture/posy.jpg',
         },
         {
           target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Y,
-          url: 'https://webglfundamentals.org/webgl/resources/images/computer-history-museum/neg-y.jpg',
+          url: 'texture/negy.jpg',
         },
         {
           target: gl.TEXTURE_CUBE_MAP_POSITIVE_Z,
-          url: 'https://webglfundamentals.org/webgl/resources/images/computer-history-museum/pos-z.jpg',
+          url: 'texture/posz.jpg',
         },
         {
           target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z,
-          url: 'https://webglfundamentals.org/webgl/resources/images/computer-history-museum/neg-z.jpg',
+          url: 'texture/negz.jpg',
         },
       ];
 
