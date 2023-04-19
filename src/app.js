@@ -40,6 +40,10 @@ var textureCoordBuffer = initTextureBuffer(gl);
 var target = [0, 0, 0];
 var up = [0, 1, 0];
 
+var objectTarget = state.model.object;
+
+var transformModelView = [];
+
 function drawScene() {
     // ------ Start Initialization --------
     updateState();
@@ -60,7 +64,10 @@ function drawScene() {
     var colorAttribLocation = gl.getAttribLocation(program, "a_color");
     var textureCoordLocation = gl.getAttribLocation(program, "a_texCoord");
     var samplerImageLocation = gl.getUniformLocation(program, "u_samplerImage");
-    var samplerEnvironmentLocation = gl.getUniformLocation(program, "u_samplerEnvironment");
+    var samplerEnvironmentLocation = gl.getUniformLocation(
+        program,
+        "u_samplerEnvironment"
+    );
     var worldCameraPositionLocation = gl.getUniformLocation(
         program,
         "u_worldCameraPosition"
@@ -111,7 +118,6 @@ function drawScene() {
         cameraUp
     );
     // viewMatrix = m4.inverse(viewMatrix);
-    
 
     // Compute a world matrix
     var modelMatrix = m4.identity();
@@ -152,6 +158,27 @@ function drawScene() {
         state.translation.z
     );
 
+    if (state.selected_component == "Root") {
+        for (const key in state.object_references) {
+            if (Object.hasOwnProperty.call(state.object_references, key)) {
+                state.object_references[key].model_matrix = Object.assign(
+                    [],
+                    modelMatrix
+                );
+            }
+        }
+    } else {
+        if (
+            Object.hasOwnProperty.call(
+                state.object_references,
+                state.selected_component
+            )
+        ) {
+            state.object_references[state.selected_component].model_matrix =
+                Object.assign([], modelMatrix);
+        }
+    }
+
     // If the projection is perspective, multiply the matrices
     if (state.projection_type === "perspective") {
         projectionMatrix = m4.perspective(
@@ -168,8 +195,6 @@ function drawScene() {
             1000
         );
     }
-
-    gl.uniformMatrix4fv(modelUniformLocation, false, modelMatrix);
 
     gl.uniformMatrix4fv(viewUniformLocation, false, viewMatrix);
 
@@ -200,20 +225,22 @@ function drawScene() {
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 
     // Draw the model here
-    var model = state.model;
+    // var model = state.model;
 
     gl.uniform1i(samplerImageLocation, 0);
     gl.uniform1i(samplerEnvironmentLocation, 1);
 
     objectDraw(
         gl,
-        model.object,
+        objectTarget,
+        modelUniformLocation,
         normalUniformLocation,
         normalAttribLocation,
         positionAttribLocation,
         colorAttribLocation,
         modelMatrix
     );
+    console.log("");
 }
 
 function main() {
@@ -224,6 +251,7 @@ function main() {
 function objectDraw(
     gl,
     object,
+    modelUniformLocation,
     normalUniformLocation,
     normalAttribLocation,
     positionAttribLocation,
@@ -242,6 +270,9 @@ function objectDraw(
 
     var normal = normalVectorsObject(object.position.flat(), indices);
 
+    // Set the object model_matrix
+    gl.uniformMatrix4fv(modelUniformLocation, false, object.model_matrix);
+
     for (var i = 0; i < object.position.length; i++) {
         // Set position buffer
         setBuffer(
@@ -252,14 +283,7 @@ function objectDraw(
             3
         );
 
-        gl.vertexAttribPointer(
-            normalAttribLocation,
-            3,
-            gl.FLOAT,
-            false,
-            0,
-            0
-        );
+        gl.vertexAttribPointer(normalAttribLocation, 3, gl.FLOAT, false, 0, 0);
         gl.enableVertexAttribArray(normalAttribLocation);
 
         // Set normal buffer
@@ -277,16 +301,14 @@ function objectDraw(
             gl.STATIC_DRAW
         );
 
-        gl.uniformMatrix4fv(
-            normalUniformLocation,
-            false,
-            m4.transpose(m4.inverse(modelMatrix))
-        );
+        // gl.uniformMatrix4fv(
+        //     normalUniformLocation,
+        //     false,
+        //     m4.transpose(m4.inverse(object.model_matrix))
+        // );
 
         if (state.is_shading) {
-
         } else {
-
         }
 
         // setBuffer(gl, colorBuffer, model.color[i], colorAttribLocation, 3);
@@ -299,6 +321,7 @@ function objectDraw(
         objectDraw(
             gl,
             object.children[i].object,
+            modelUniformLocation,
             normalUniformLocation,
             normalAttribLocation,
             positionAttribLocation,
