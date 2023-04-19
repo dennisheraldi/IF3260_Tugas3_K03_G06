@@ -3,6 +3,7 @@ var fox = {
         name: "Root",
         position: [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
         color: [],
+        texture_type: "None",
         texture_coords: [],
         model_matrix: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
         transform: {
@@ -66,6 +67,8 @@ var fox = {
                         ]
                     ],
                     color: [],
+
+                    texture_type: "None",
                     texture_coords: [],
                     model_matrix: [
                         1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
@@ -131,6 +134,8 @@ var fox = {
                                     ],
                                 ],
                                 color: [],
+
+                                texture_type: "None",
                                 texture_coords: [],
                                 model_matrix: [
                                     1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0,
@@ -197,6 +202,8 @@ var fox = {
                                                 ],
                                             ],
                                             color: [],
+
+                                            texture_type: "None",
                                             texture_coords: [],
                                             model_matrix: [
                                                 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
@@ -265,6 +272,8 @@ var fox = {
                                                 ]
                                             ],
                                             color: [],
+
+                                            texture_type: "None",
                                             texture_coords: [],
                                             model_matrix: [
                                                 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
@@ -335,6 +344,8 @@ var fox = {
                                                 
                                             ],
                                             color: [],
+
+                                            texture_type: "None",
                                             texture_coords: [],
                                             model_matrix: [
                                                 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
@@ -406,6 +417,8 @@ var fox = {
                                     ],
                                 ],
                                 color: [],
+
+                                texture_type: "None",
                                 texture_coords: [
                                     // front face
                                     0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0,
@@ -487,6 +500,8 @@ var fox = {
                                     ]
                                 ],
                                 color: [],
+
+                                texture_type: "None",
                                 texture_coords: [],
                                 model_matrix: [
                                     1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0,
@@ -555,6 +570,8 @@ var fox = {
                                     ]
                                 ],
                                 color: [],
+
+                                texture_type: "None",
                                 texture_coords: [],
                                 model_matrix: [
                                     1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0,
@@ -623,6 +640,8 @@ var fox = {
                                     ]
                                 ],
                                 color: [],
+
+                                texture_type: "None",
                                 texture_coords: [],
                                 model_matrix: [
                                     1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0,
@@ -691,6 +710,8 @@ var fox = {
                                     ]
                                 ],
                                 color: [],
+
+                                texture_type: "None",
                                 texture_coords: [],
                                 model_matrix: [
                                     1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0,
