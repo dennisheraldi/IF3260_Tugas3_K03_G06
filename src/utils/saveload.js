@@ -83,9 +83,18 @@ function saveOldTraverse() {
                 centerPoints[2] * -1
             );
         }
-        transformation = m4.xRotate(transformation, degToRad(transform.rotation.x));
-        transformation = m4.yRotate(transformation, degToRad(transform.rotation.y));
-        transformation = m4.zRotate(transformation, degToRad(transform.rotation.z));
+        transformation = m4.xRotate(
+            transformation,
+            degToRad(transform.rotation.x)
+        );
+        transformation = m4.yRotate(
+            transformation,
+            degToRad(transform.rotation.y)
+        );
+        transformation = m4.zRotate(
+            transformation,
+            degToRad(transform.rotation.z)
+        );
         if (component.name != "Root") {
             let centerPoints = centerOfMass(component.position);
             transformation = m4.translate(
@@ -136,7 +145,9 @@ function saveOldTraverse() {
     traverse(model.object);
 
     // Save the transformed model
-    let blob = new Blob([JSON.stringify(model)], { type: "text/plain;charset=utf-8" });
+    let blob = new Blob([JSON.stringify(model)], {
+        type: "text/plain;charset=utf-8",
+    });
     let blobUrl = URL.createObjectURL(blob);
     let link = document.getElementById("downloader-link");
     link.href = blobUrl;
@@ -146,7 +157,9 @@ function saveOldTraverse() {
 
 function save() {
     // stringify state.model and save to json
-    let blob = new Blob([JSON.stringify(state.model)], { type: "text/plain;charset=utf-8" });
+    let blob = new Blob([JSON.stringify(state.model)], {
+        type: "text/plain;charset=utf-8",
+    });
     let blobUrl = URL.createObjectURL(blob);
     let link = document.getElementById("downloader-link");
     link.href = blobUrl;
@@ -161,7 +174,11 @@ async function load() {
         const model = JSON.parse(text);
         state.model = model;
         state.model_type = "loaded";
-        // state.center_points = centerOfMass(state.model.position);
+        treeview.select("root");
+        treeview.destroy();
+        treeview.replaceData(root);
+        appendDataFromObject(state.model.object, "root");
+        treeview.select("root");
         drawScene();
     });
 }
