@@ -53,7 +53,12 @@ function updateState() {
 }
 
 function resetState() {
+    // set everything in state to initial state except model and object_references
+    var holder = state.object_references;
     state = JSON.parse(JSON.stringify(initialState));
+    state.model = JSON.parse(JSON.stringify(initial_models[current_model_index]));
+    models[current_model_index] = JSON.parse(JSON.stringify(initial_models[current_model_index]));
+    state.object_references = holder;
     document.getElementById("view-field").value = state.view_field;
     document.getElementById("value-view-field").innerHTML = state.view_field;
     document.getElementById("f-factor").value = state.f_factor;
@@ -70,22 +75,23 @@ function resetState() {
     treeview.replaceData(root);
     appendDataFromObject(state.model.object, "root");
     treeview.select("root");
+    drawScene();
 }
 
 // set listener to reset-btn
 document.getElementById("reset-btn").addEventListener("click", (e) => {
-    const holder = state.model;
     resetState();
-    state.model = holder;
-    drawScene();
 });
 
 models = [fox, human, chicken, dog];
+initial_models = JSON.parse(JSON.stringify(models));
+current_model_index = 0;
 // set listener to model selection radio buttons
 var modelSelection = document.querySelectorAll('input[name="model"]');
 modelSelection.forEach((model) => {
     model.addEventListener("change", (e) => {
         state.model = models[e.target.value];
+        current_model_index = e.target.value;
         state.model_type = "preserved";
         treeview.select("root");
         treeview.destroy();
