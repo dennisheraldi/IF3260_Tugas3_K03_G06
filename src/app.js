@@ -17,7 +17,8 @@ var locator = {};
 
 assignLocator(gl, program, locator);
 
-var customTexture = loadTexture(gl, "texture/sob.png");
+var textureUrl = "texture/sob.png";
+var customTexture = loadTexture(gl, textureUrl, drawScene);
 
 var bumpTexture = loadBump(gl, "texture/bump_normal.png");
 
@@ -269,6 +270,12 @@ function objectDraw(gl, object) {
     for (let i = 0; i < object.children.length; i++) {
         objectDraw(gl, object.children[i].object);
     }
+}
+
+function restartTexture(url) {
+    gl.deleteTexture(customTexture);
+
+    customTexture = loadTexture(gl, url, drawScene);
 }
 
 window.onload = main;

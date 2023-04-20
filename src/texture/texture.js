@@ -1,4 +1,4 @@
-function loadTexture(gl, url) {
+function loadTexture(gl, url, drawSceneFunction) {
     var texture = gl.createTexture();
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -62,6 +62,7 @@ function loadTexture(gl, url) {
             );
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
         }
+        drawSceneFunction();
     };
     image.src = url;
 
