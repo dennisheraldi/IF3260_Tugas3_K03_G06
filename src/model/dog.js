@@ -561,6 +561,7 @@ var dog = {
             },
         ],
     },
+    animation: dog_animation,
 };
 
 function dfsColorFilling(object) {
