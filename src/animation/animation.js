@@ -63,7 +63,7 @@ async function animate() {
         // Put your drawing code here
         nextFrame = anim[frameIdx];
 
-        state.model = nextFrame;
+        state.model.object = nextFrame.object;
         treeview.select("root");
         treeview.destroy();
         treeview.replaceData(root);
