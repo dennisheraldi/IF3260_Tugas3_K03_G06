@@ -38,7 +38,7 @@ var normalBuffer = gl.createBuffer();
 // init texture
 var textureCoordBuffer = initTextureBuffer(gl);
 
-gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+// gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 
 // Initialize camera
 var target = [0, 0, 0];
