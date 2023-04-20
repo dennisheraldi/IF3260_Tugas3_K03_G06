@@ -437,3 +437,21 @@ details details {
 .mt-10 {
     margin-top: 10px;
 }
+
+.texture-container {
+    border-radius: 0.5rem;
+    padding: 5px;
+    margin-right: 15px;
+    margin-bottom: 20px;
+    background-color: #1e293b;
+}
+
+#texture-file-upload-container {
+    display: none;
+    margin-top: 15px;
+    background-color: #1e293b;
+}
+
+#texture-file-input {
+    background-color: #1e293b;
+}

@@ -740,6 +740,7 @@ var fox = {
             },
         ],
     },
+    animation: fox_animation,
 };
 
 function dfsColorFilling(object) {

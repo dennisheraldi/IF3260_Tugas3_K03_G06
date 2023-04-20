@@ -1,6 +1,6 @@
 var human = {
   object: {
-    name: "Root",
+    name: 'Root',
     position: [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
     color: [],
     texture_type: 0,
@@ -26,7 +26,7 @@ var human = {
     children: [
       {
         object: {
-          name: "Body",
+          name: 'Body',
           // prettier-ignore
           position: [
             [ // front
@@ -90,7 +90,7 @@ var human = {
           children: [
             {
               object: {
-                name: "Head",
+                name: 'Head',
                 // prettier-ignore
                 position: [
                   [ // front
@@ -133,9 +133,7 @@ var human = {
                 color: [],
                 texture_coords: [],
                 texture_type: 0,
-                model_matrix: [
-                  1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
-                ],
+                model_matrix: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
                 transform: {
                   rotation: {
                     x: 0,
@@ -158,7 +156,7 @@ var human = {
             },
             {
               object: {
-                name: "LeftShoulder",
+                name: 'LeftShoulder',
                 // prettier-ignore
                 position: [
                   [ // front
@@ -201,9 +199,7 @@ var human = {
                 color: [],
                 texture_coords: [],
                 texture_type: 0,
-                model_matrix: [
-                  1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
-                ],
+                model_matrix: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
                 transform: {
                   rotation: {
                     x: 0,
@@ -224,7 +220,7 @@ var human = {
                 children: [
                   {
                     object: {
-                      name: "LeftArm",
+                      name: 'LeftArm',
                       // prettier-ignore
                       position: [
                         [ // front
@@ -268,10 +264,7 @@ var human = {
                       color: [],
                       texture_coords: [],
                       texture_type: 0,
-                      model_matrix: [
-                        1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0,
-                        1,
-                      ],
+                      model_matrix: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
                       transform: {
                         rotation: {
                           x: 0,
@@ -297,7 +290,7 @@ var human = {
             },
             {
               object: {
-                name: "RightShoulder",
+                name: 'RightShoulder',
                 // prettier-ignore
                 position: [
                   [ // front
@@ -340,9 +333,7 @@ var human = {
                 color: [],
                 texture_coords: [],
                 texture_type: 0,
-                model_matrix: [
-                  1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
-                ],
+                model_matrix: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
                 transform: {
                   rotation: {
                     x: 0,
@@ -363,7 +354,7 @@ var human = {
                 children: [
                   {
                     object: {
-                      name: "RightArm",
+                      name: 'RightArm',
                       // prettier-ignore
                       position: [
                         [ // front
@@ -407,10 +398,7 @@ var human = {
                       color: [],
                       texture_coords: [],
                       texture_type: 0,
-                      model_matrix: [
-                        1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0,
-                        1,
-                      ],
+                      model_matrix: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
                       transform: {
                         rotation: {
                           x: 0,
@@ -428,78 +416,7 @@ var human = {
                           z: 1,
                         },
                       },
-                      children: [
-                        {
-                          object: {
-                            name: "LeftArm",
-                            // prettier-ignore
-                            position: [
-                              [ // front
-                                0.52, 0.0, 0.13,
-                                0.33, 0.0, 0.13,
-                                0.33, -0.4, 0.13,
-                                0.52, -0.4, 0.13,
-                              ],
-                              [ // back
-                                0.33, -0.4, -0.13,
-                                0.33, 0.0, -0.13,
-                                0.52, 0.0, -0.13,
-                                0.52, -0.4, -0.13,
-                              ],
-                              [ // left
-                                0.33, 0.0, 0.13,
-                                0.33, 0.0, -0.13,
-                                0.33, -0.4, -0.13,
-                                0.33, -0.4, 0.13,
-                              ],
-                              [ // right
-                                0.52, 0.0, 0.13,
-                                0.52, -0.4, 0.13,
-                                0.52, -0.4, -0.13,
-                                0.52, 0.0, -0.13,
-                              ],
-                              [ // top
-                                0.52, 0.0, -0.13,
-                                0.33, 0.0, -0.13,
-                                0.33, 0.0, 0.13,
-                                0.52, 0.0, 0.13,
-                              ],
-                              [
-                                // bottom
-                                0.52, -0.4, 0.13,
-                                0.33, -0.4, 0.13,
-                                0.33, -0.4, -0.13,
-                                0.52, -0.4, -0.13,
-                              ]
-                            ],
-                            color: [],
-                            texture_coords: [],
-                            texture_type: 0,
-                            model_matrix: [
-                              1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
-                              0, 0, 0, 0, 1,
-                            ],
-                            transform: {
-                              rotation: {
-                                x: 0,
-                                y: 0,
-                                z: 0,
-                              },
-                              translation: {
-                                x: 0,
-                                y: 0,
-                                z: 0,
-                              },
-                              scaling: {
-                                x: 1,
-                                y: 1,
-                                z: 1,
-                              },
-                            },
-                            children: [],
-                          },
-                        },
-                      ],
+                      children: [],
                     },
                   },
                 ],
@@ -507,39 +424,39 @@ var human = {
             },
             {
               object: {
-                name: "LeftLeg",
+                name: 'LeftLeg',
                 // prettier-ignore
                 position: [
                   [ // front
-                    0.28, 0.0, 0.13,
-                    0.02, 0.0, 0.13,
+                    0.28, -0.4, 0.13,
+                    0.02, -0.4, 0.13,
                     0.02, -1.0, 0.13,
                     0.28, -1.0, 0.13,
                   ],
                   [ // back
-                    0.02, 0.0, -0.13,
-                    0.28, 0.0, -0.13,
+                    0.02, -0.4, -0.13,
+                    0.28, -0.4, -0.13,
                     0.28, -1.0, -0.13,
                     0.02, -1.0, -0.13,
                   ],
                   [ // left
-                    0.02, 0.0, 0.13,
-                    0.02, 0.0, -0.13,
+                    0.02, -0.4, 0.13,
+                    0.02, -0.4, -0.13,
                     0.02, -1.0, -0.13,
                     0.02, -1.0, 0.13,
                   ],
                   [ // right
-                    0.28, 0.0, -0.13,
-                    0.28, 0.0, 0.13,
+                    0.28, -0.4, -0.13,
+                    0.28, -0.4, 0.13,
                     0.28, -1.0, 0.13,
                     0.28, -1.0, -0.13,
                   ],
                   [
                     // top
-                    0.28, 0.0, 0.13,
-                    0.02, 0.0, 0.13,
-                    0.02, 0.0, -0.13,
-                    0.28, 0.0, -0.13,
+                    0.02, -0.4, -0.13,
+                    0.02, -0.4, 0.13,
+                    0.28, -0.4, 0.13,
+                    0.28, -0.4, -0.13,
                   ],
                   [
                     // bottom
@@ -552,9 +469,7 @@ var human = {
                 color: [],
                 texture_coords: [],
                 texture_type: 0,
-                model_matrix: [
-                  1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
-                ],
+                model_matrix: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
                 transform: {
                   rotation: {
                     x: 0,
@@ -577,39 +492,39 @@ var human = {
             },
             {
               object: {
-                name: "RightLeg",
+                name: 'RightLeg',
                 // prettier-ignore
                 position: [
                   [ // front
-                    -0.02, 0.0, 0.13,
-                    -0.28, 0.0, 0.13,
+                    -0.02, -0.4, 0.13,
+                    -0.28, -0.4, 0.13,
                     -0.28, -1.0, 0.13,
                     -0.02, -1.0, 0.13,
                   ],
                   [ // back
-                    -0.28, 0.0, -0.13,
-                    -0.02, 0.0, -0.13,
+                    -0.28, -0.4, -0.13,
+                    -0.02, -0.4, -0.13,
                     -0.02, -1.0, -0.13,
                     -0.28, -1.0, -0.13,
                   ],
                   [ // left
                     -0.02, -1.0, -0.13,
-                    -0.02, 0.0, -0.13,
-                    -0.02, 0.0, 0.13,
+                    -0.02, -0.4, -0.13,
+                    -0.02, -0.4, 0.13,
                     -0.02, -1.0, 0.13,
                   ],
                   [ // right
-                    -0.28, 0.0, 0.13,
-                    -0.28, 0.0, -0.13,
+                    -0.28, -0.4, 0.13,
+                    -0.28, -0.4, -0.13,
                     -0.28, -1.0, -0.13,
                     -0.28, -1.0, 0.13,
                   ],
                   [
                     // top
-                    -0.02, 0.0, -0.13,
-                    -0.02, 0.0, 0.13,
-                    -0.28, 0.0, 0.13,
-                    -0.28, 0.0, -0.13,
+                    -0.28, -0.4, 0.13,
+                    -0.02, -0.4, 0.13,
+                    -0.02, -0.4, -0.13,
+                    -0.28, -0.4, -0.13,
                   ],
                   [
                     // bottom
@@ -622,9 +537,7 @@ var human = {
                 color: [],
                 texture_coords: [],
                 texture_type: 0,
-                model_matrix: [
-                  1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
-                ],
+                model_matrix: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
                 transform: {
                   rotation: {
                     x: 0,
@@ -647,7 +560,8 @@ var human = {
             },
           ],
         },
-      }
-    ]
-  }
+      },
+    ],
+  },
+  animation: human_animation,
 };
