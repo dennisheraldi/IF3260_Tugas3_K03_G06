@@ -34,7 +34,6 @@ var stop = false;
 var frameCount = 0;
 var fps, fpsInterval, startTime, now, then, elapsed;
 
-
 // initialize the timer variables and start the animation
 
 function startAnimating(fps) {
@@ -55,7 +54,6 @@ async function animate() {
     // if enough time has elapsed, draw the next frame
 
     if (elapsed > 500) {
-
         // Get ready for next frame by setting then=now, but also adjust for your
         // specified fpsInterval not being a multiple of RAF's interval (16.7ms)
         then = now - (elapsed % 500);
@@ -84,7 +82,7 @@ toggleSwitchAnimation.addEventListener("change", function () {
         // do something when the switch is on
         document.getElementById("on-off-label-animation").innerHTML = "ON";
         anim = state.model.animation;
-        startAnimating(2)
+        startAnimating(2);
     } else {
         // do something when the switch is off
         document.getElementById("on-off-label-animation").innerHTML = "OFF";
